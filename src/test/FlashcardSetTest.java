@@ -18,6 +18,7 @@ public class FlashcardSetTest {
     public void emptySet() {
         assertEquals(0, set.length());
         assertTrue(set.isEmpty());
+        assertEquals(null, set.getCard("bob"));
     }
 
     @Test
@@ -25,6 +26,8 @@ public class FlashcardSetTest {
         for (int i = 0; i < size; i++) {
             set.addCard(new Flashcard(String.valueOf(i), String.valueOf(i)));
         }
+        set.setSetName("bob");
+        assertEquals("bob", set.getSetName());
         assertEquals(10, set.length());
         assertFalse(set.isEmpty());
         set.removeCard("0");
@@ -45,4 +48,5 @@ public class FlashcardSetTest {
         set.getCard("2").markCompleted();
         assertTrue(set.isCompleted());
     }
+
 }
