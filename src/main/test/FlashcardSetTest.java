@@ -8,12 +8,12 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FlashcardSetTest {
-    public FlashcardSet set;
-    public Integer SIZE = 10;
+    private FlashcardSet set;
+    private int size = 10;
 
     @BeforeEach
     public void createSet() {
-        set = new FlashcardSet();
+        set = new FlashcardSet("");
     }
 
     @Test
@@ -21,9 +21,10 @@ public class FlashcardSetTest {
         assertEquals(0, set.length());
         assertTrue(set.isEmpty());
     }
+
     @Test
     public void normalSetTest() {
-        for (int i = 0; i < SIZE; i++) {
+        for (int i = 0; i < size; i++) {
             set.addCard(new Flashcard(String.valueOf(i), String.valueOf(i)));
         }
         assertEquals(10, set.length());
@@ -35,15 +36,13 @@ public class FlashcardSetTest {
 
     @Test
     public void completionTest() {
-        for (int i = 0; i < SIZE; i++) {
+        for (int i = 0; i < 3; i++) {
             set.addCard(new Flashcard(String.valueOf(i), String.valueOf(i)));
         }
         assertFalse(set.isCompleted());
-
-        for (Flashcard f: set) {
-            f.markCompleted();
-        }
+        set.getCard("0").markCompleted();
+        set.getCard("1").markCompleted();
+        set.getCard("2").markCompleted();
         assertTrue(set.isCompleted());
-
     }
 }

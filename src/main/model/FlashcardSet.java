@@ -1,17 +1,18 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 public class FlashcardSet {
-    private List<Flashcard> flashcards;
+    private LinkedList<Flashcard> flashcards;
     private String category;
     private boolean completed;
     private String setName;
+    private Flashcard current;
 
     public FlashcardSet(String name) {
-        flashcards = new ArrayList<>();
+        flashcards = new LinkedList<>();
         completed = false;
         category = "";
         setName = name;
@@ -37,24 +38,54 @@ public class FlashcardSet {
         return setName;
     }
 
+    //EFFECTS: if the flashcard with name card exists, return card. Otherwise return null
+    public Flashcard getCard(String card) {
+        for (Flashcard c : flashcards) {
+            if (c.getFront().equals(card)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    public Flashcard getNextCard() {
+        current = flashcards.pop();
+        flashcards.offer(current);
+        return current;
+    }
+
+
     //MODIFIES: this
     //EFFECTS: adds new card to FlashcardSet
     public void addCard(Flashcard card) {
-        //stub
+        flashcards.add(card);
     }
 
     //MODIFIES: this
     //EFFECTS: if a card with given name exists, remove it from the set and return true.
     //otherwise return false
     public boolean removeCard(String name) {
-        return false;
+        List<Flashcard> remove = new ArrayList<>();
+        for (Flashcard c : flashcards) {
+            if (c.getFront().equals(name)) {
+                remove.add(c);
+            }
+        }
+        return flashcards.removeAll(remove);
     }
 
 
     //EFFECTS: if all the cards within the set are completed, mark the set as completed.
     //Otherwise return false.
     public boolean isCompleted() {
-        return false;
+        for (Flashcard c : flashcards) {
+            if (!(c.isCompleted())) {
+                completed = false;
+            } else {
+                completed = true;
+            }
+        }
+        return completed;
     }
 
     //EFFECTS: forces the set to be complete, regardless of the status of individual cards
@@ -64,15 +95,13 @@ public class FlashcardSet {
 
     //EFFECTS: return the size of the set
     public Integer length() {
-        return 0;
+        return flashcards.size();
     }
 
     //EFFECTS: returns true if the set is empty, otherwise return false
     public boolean isEmpty() {
-        return false;
+        return flashcards.isEmpty();
     }
-
-
 
 
 }

@@ -29,6 +29,9 @@ public class Flashcard {
     //MODIFIES: this
     //EFFECTS: if completed is false, set it to true. If completed is already true, return false
     public boolean markCompleted() {
+        if (completed == false) {
+            completed = true;
+        }
         return false;
     }
 

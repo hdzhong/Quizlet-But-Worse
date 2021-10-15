@@ -4,10 +4,10 @@ import model.Flashcard;
 import org.junit.jupiter.api.BeforeEach;
 
 public class FlashcardTest {
-    public Flashcard card;
+    private Flashcard card;
 
     @BeforeEach
-    public void CreateCard() {
+    public void createCard() {
         card = new Flashcard("", "");
     }
 

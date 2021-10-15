@@ -5,13 +5,11 @@ import model.FlashcardSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FlashcardLibraryTest {
-    public FlashcardLibrary lib;
-    public Integer SIZE = 10;
+    private FlashcardLibrary lib;
+    private Integer size = 10;
 
     @BeforeEach
     public void createLibrary() {
@@ -20,13 +18,13 @@ public class FlashcardLibraryTest {
 
     @Test
     public void emptyLibraryTest() {
-        assertEquals(0,lib.length());
+        assertEquals(0, lib.length());
         assertTrue(lib.isEmpty());
     }
 
     @Test
     public void normalLibraryTest() {
-        for (int i = 0; i < SIZE; i++) {
+        for (int i = 0; i < size; i++) {
             lib.addSet(new FlashcardSet(String.valueOf(i)));
         }
         assertEquals(10, lib.length());
@@ -35,14 +33,15 @@ public class FlashcardLibraryTest {
         lib.removeSet("0");
 
         assertEquals(9, lib.length());
-        assertFalse(lib.getSet("0"));
+        assertEquals("null", lib.getSet("0").getSetName());
 
-        assertEquals(9, lib.viewLibrary());
+        assertEquals(9, lib.viewLibrary().size());
+        assertFalse(lib.removeSet("0"));
     }
 
     @Test
     public void categoryTest() {
-        for (int i = 0; i < SIZE; i++) {
+        for (int i = 0; i < size; i++) {
             lib.addSet(new FlashcardSet(String.valueOf(i)));
         }
         lib.getSet("0").setCategory("Science");
@@ -55,13 +54,15 @@ public class FlashcardLibraryTest {
 
     @Test
     public void completedTest() {
-        for (int i = 0; i < SIZE; i++) {
+        for (int i = 0; i < size; i++) {
             lib.addSet(new FlashcardSet(String.valueOf(i)));
         }
         lib.getSet("0").forceComplete();
         lib.getSet("1").forceComplete();
 
         assertEquals(2, lib.completedSets().size());
-        assertEquals(7, lib.needToComplete().size());
-
+        assertEquals(8, lib.needToComplete().size());
+    }
 }
+
+
