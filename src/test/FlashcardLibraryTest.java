@@ -1,5 +1,3 @@
-package test;
-
 import model.FlashcardLibrary;
 import model.FlashcardSet;
 import org.junit.jupiter.api.BeforeEach;
