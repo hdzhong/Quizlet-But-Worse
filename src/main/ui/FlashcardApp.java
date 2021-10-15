@@ -104,7 +104,6 @@ public class FlashcardApp {
         String command;
 
         while (viewingSet) {
-            Flashcard card;
             FlashcardSet current;
             System.out.print("Enter set you would like to view: ");
             String name = input.next();
@@ -158,8 +157,6 @@ public class FlashcardApp {
 
     //MODIFIES: this
     //EFFECTS: user input to remove specific sets
-
-    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private void removeSet() {
         boolean removingSet = true;
         String command;
@@ -168,18 +165,7 @@ public class FlashcardApp {
             System.out.print("Enter set you would like to remove: ");
             String name = input.next();
             if (library.getSet(name).getSetName().equals(name)) {
-                System.out.println("Are you sure you want to remove this?");
-                String text = input.next();
-                if (text.equals("yes")) {
-                    library.removeSet(name);
-                } else {
-                    System.out.println("Would you like to remove a different set?");
-                    text = input.next();
-                    if (text.equals("yes")) {
-                        continue;
-                    }
-                    break;
-                }
+                library.removeSet(name);
             } else {
                 System.out.println("Sorry, this set does not exist");
                 System.out.println("Please try another set");
