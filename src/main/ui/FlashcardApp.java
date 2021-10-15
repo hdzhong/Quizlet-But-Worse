@@ -6,6 +6,9 @@ import model.FlashcardSet;
 
 import java.util.Scanner;
 
+// This class references code from this CPSC 210 GitHub repo
+// Link: https://github.students.cs.ubc.ca/CPSC210/TellerApp
+
 public class FlashcardApp {
     private FlashcardLibrary library;
     private Scanner input;
@@ -156,6 +159,7 @@ public class FlashcardApp {
     //MODIFIES: this
     //EFFECTS: user input to remove specific sets
 
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private void removeSet() {
         boolean removingSet = true;
         String command;
@@ -170,7 +174,11 @@ public class FlashcardApp {
                     library.removeSet(name);
                 } else {
                     System.out.println("Would you like to remove a different set?");
-                    continue;
+                    text = input.next();
+                    if (text.equals("yes")) {
+                        continue;
+                    }
+                    break;
                 }
             } else {
                 System.out.println("Sorry, this set does not exist");
