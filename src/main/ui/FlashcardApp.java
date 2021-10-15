@@ -73,18 +73,22 @@ public class FlashcardApp {
     private void makeSet() {
         boolean makingSet = true;
         String command;
-        System.out.print("Enter set name: ");
-        String name = input.next();
-        FlashcardSet set = new FlashcardSet(name);
+
 
         while (makingSet) {
+            System.out.print("Enter set name: ");
+            String name = input.next();
+            FlashcardSet set = new FlashcardSet(name);
+
             System.out.println("Add the front of the card: ");
             String front = input.next();
             System.out.println("Add the back of the card: ");
             String back = input.next();
+
             set.addCard(new Flashcard(front, back));
             library.addSet(set);
-            System.out.println("Would you like to add more cards? (x to exit)");
+
+            System.out.println("Would you like to add more cards? (x to exit, yes to continue)");
             command = input.next();
             makingSet = returnToMenu(true, command);
         }
@@ -110,7 +114,7 @@ public class FlashcardApp {
 
             viewCard(true, current);
 
-            System.out.println("Would you like to view a different set? (press x to exit)");
+            System.out.println("Would you like to view a different set? (press x to exit, yes to continue)");
             command = input.next();
             viewingSet = returnToMenu(true, command);
         }
@@ -124,7 +128,9 @@ public class FlashcardApp {
         } else if (command.equals("yes")) {
             return menu;
         } else {
-            System.out.println("What would like to do next?");
+            System.out.println("Please try again");
+            command = input.next();
+            returnToMenu(menu, command);
         }
         return menu;
     }
