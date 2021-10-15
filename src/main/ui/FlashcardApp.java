@@ -19,7 +19,7 @@ public class FlashcardApp {
     // EFFECTS: processes user input
     private void runApp() {
         boolean keepGoing = true;
-        String command = null;
+        String command;
 
         init();
 
@@ -49,21 +49,27 @@ public class FlashcardApp {
             makeSet();
         } else if (command.equals("d")) {
             removeSet();
-        } else if (command.equals("vs")) {
+        } else if (command.equals("e")) {
             viewSet();
         } else {
             System.out.println("Selection not valid...");
         }
     }
 
+    //MODIFIES: this
+    //EFFECTS: displays all sets
     private void viewSets() {
         System.out.println(library.viewLibrary());
     }
 
+    //MODIFIES: this and library (?)
+    //EFFECTS: displays all sets that are marked as complete (not implemented yet)
     private void viewCompletedSets() {
         System.out.println(library.completedSets());
     }
 
+    //MODIFIES: this
+    //EFFECTS: creates set based on user input
     private void makeSet() {
         boolean makingSet = true;
         String command;
@@ -77,25 +83,20 @@ public class FlashcardApp {
             System.out.println("Add the back of the card: ");
             String back = input.next();
             set.addCard(new Flashcard(front, back));
+            library.addSet(set);
             System.out.println("Would you like to add more cards? (x to exit)");
             command = input.next();
-            if (command.equals("x")) {
-                library.addSet(set);
-                makingSet = false;
-            } else if (command.equals("yes")) {
-                continue;
-            } else {
-                System.out.println("What would like to do next?");
-            }
+            makingSet = returnToMenu(true, command);
         }
     }
+    //MODIFIES: this
+    //EFFECTS: allows user to view individual cards within a chosen set
 
     private void viewSet() {
         boolean viewingSet = true;
         String command;
 
         while (viewingSet) {
-            boolean viewingCards = true;
             Flashcard card;
             FlashcardSet current;
             System.out.print("Enter set you would like to view: ");
@@ -107,29 +108,47 @@ public class FlashcardApp {
                 continue;
             }
 
-            while (viewingCards) {
-                card = current.getNextCard();
-                System.out.println(card);
-                System.out.println("Press n to go to the next card, x to exit back to set selection");
-                String action = input.next();
-                if (action.equals("n")) {
-                    continue;
-                } else {
-                    viewingCards = false;
-                }
-            }
+            viewCard(true, current);
 
             System.out.println("Would you like to view a different set? (press x to exit)");
             command = input.next();
-            if (command.equals("x")) {
-                viewingSet = false;
-            } else if (command.equals("yes")) {
+            viewingSet = returnToMenu(true, command);
+        }
+    }
+
+    //MODIFIES: this
+    //EFFECTS: user can choose to return to menu or continue with the current operation
+    private boolean returnToMenu(boolean menu, String command) {
+        if (command.equals("x")) {
+            menu = false;
+        } else if (command.equals("yes")) {
+            return menu;
+        } else {
+            System.out.println("What would like to do next?");
+        }
+        return menu;
+    }
+
+    //MODIFIES: this?
+    //EFFECTS: displays the front and back of the current card and can also go to the next card.
+    private void viewCard(boolean viewingCards, FlashcardSet current) {
+        Flashcard card;
+        while (viewingCards) {
+            card = current.getNextCard();
+            System.out.println("Front: " + card.getFront());
+            System.out.println("Back: " + card.getBack());
+            System.out.println("Press n to go to the next card, x to exit back to set selection");
+            String action = input.next();
+            if (action.equals("n")) {
                 continue;
             } else {
-                System.out.println("What would like to do next?");
+                viewingCards = false;
             }
         }
     }
+
+    //MODIFIES: this
+    //EFFECTS: user input to remove specific sets
 
     private void removeSet() {
         boolean removingSet = true;
@@ -154,13 +173,7 @@ public class FlashcardApp {
             }
             System.out.println("Would you like to remove another set? (press x to exit)");
             command = input.next();
-            if (command.equals("x")) {
-                removingSet = false;
-            } else if (command.equals("yes")) {
-                continue;
-            } else {
-                System.out.println("What would like to do next?");
-            }
+            removingSet = returnToMenu(true, command);
         }
     }
 
@@ -178,7 +191,7 @@ public class FlashcardApp {
         System.out.println("\nWelcome to Flashcards!:");
         System.out.println("\tv -> view existing flashcard sets");
         System.out.println("\tc -> list of completed sets");
-        System.out.println("\te -> enter a set");
+        System.out.println("\te -> view a set");
         System.out.println("\tm -> make a new set");
         System.out.println("\td -> delete a new set");
         System.out.println("\tq -> quit");
