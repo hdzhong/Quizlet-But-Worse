@@ -13,17 +13,24 @@ public class FlashcardLibrary {
     }
 
     //MODIFIES: this
-    //EFFECTS: adds new set to FlashcardLibrary if library isn't full and return true.
-    //otherwise return false
+    //EFFECTS: adds new set to FlashcardLibrary
     public boolean addSet(FlashcardSet set) {
-        return false;
+        library.add(set);
     }
 
     //MODIFIES: this
-    //EFFECTS: if the given set exists, remove it from the library and return true.
+    //EFFECTS: if the given set exists, remove it from the library.
     //otherwise return false
     public boolean removeSet(String set) {
-        return false;
+        LinkedList<FlashcardSet> remove = new LinkedList<>();
+        for (FlashcardSet s : library) {
+            if (s.getSetName() == set) {
+                remove.add(s);
+            } else {
+                return false;
+            }
+        }
+        return library.removeAll(remove);
     }
 
     //EFFECTS: returns the list of the names of the sets in the library
@@ -41,14 +48,16 @@ public class FlashcardLibrary {
     public boolean getSet(String set) {
         return false;
     }
+
     //EFFECTS: returns the names of completed sets. Returns false if there are no completed sets
     public List<String> completedSets() {
         return new ArrayList<>();
     }
 
-    //EFFECTS: returns the number of sets that are not completed
-    public Integer needToComplete() {
-        return 0;
+    //EFFECTS: returns the name of the sets that need to be completed as a list.
+    // False if all sets are completed
+    public List<String> needToComplete() {
+        return new ArrayList<>();
     }
 
     //EFFECTS: returns number of sets in the library

@@ -38,16 +38,15 @@ public class FlashcardSet {
     }
 
     //MODIFIES: this
-    //EFFECTS: adds new card to FlashcardSet if set isn't full and return true.
-    //otherwise return false
-    public boolean addCard(Flashcard card) {
-        return false;
+    //EFFECTS: adds new card to FlashcardSet
+    public void addCard(Flashcard card) {
+        //stub
     }
 
     //MODIFIES: this
-    //EFFECTS: if the given card exists, remove it from the set and return true.
+    //EFFECTS: if a card with given name exists, remove it from the set and return true.
     //otherwise return false
-    public boolean removeCard(Flashcard card) {
+    public boolean removeCard(String name) {
         return false;
     }
 
@@ -60,7 +59,17 @@ public class FlashcardSet {
 
     //EFFECTS: forces the set to be complete, regardless of the status of individual cards
     public void forceComplete() {
-        //stub
+        completed = true;
+    }
+
+    //EFFECTS: return the size of the set
+    public Integer length() {
+        return 0;
+    }
+
+    //EFFECTS: returns true if the set is empty, otherwise return false
+    public boolean isEmpty() {
+        return false;
     }
 
 
