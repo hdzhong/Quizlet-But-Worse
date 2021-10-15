@@ -2,7 +2,7 @@
 
 ## Interactive Flashcards
 
-
+### What is this?
 My project is an interactive flashcard system that can hold multiple sets of flashcards. Each flashcard set can have a 
 category and store many flashcards. Each flashcard will be able to store a question and answer and can be marked as 
 complete once the user is confident! 
@@ -14,8 +14,10 @@ Users will eventually be able to:
 * test themselves with fill-in-the-blank exercises
 * and more!
 
+### Who is this for?
 The flashcard system will be useful to any student studying multiple subjects at once.
 
+### Why am I making this?
 This project is interesting to me as I have always used flashcard tools when I studied before. I believe it would
 be a very useful tool to create and tailor to my own needs.
 

@@ -195,12 +195,12 @@ public class FlashcardApp {
     // EFFECTS: displays menu of options to user
     private void displayMenu() {
         System.out.println("\nWelcome to Flashcards!:");
-        System.out.println("\tv -> view existing flashcard sets");
-        System.out.println("\tc -> list of completed sets");
-        System.out.println("\te -> view a set");
-        System.out.println("\tm -> make a new set");
-        System.out.println("\td -> delete a new set");
-        System.out.println("\tq -> quit");
+        System.out.println("\tv -> View Existing Flashcard Sets");
+        System.out.println("\tc -> List of Completed Sets");
+        System.out.println("\te -> View a Set");
+        System.out.println("\tm -> Make a New Set");
+        System.out.println("\td -> Delete a Set");
+        System.out.println("\tq -> Quit");
     }
 }
 
