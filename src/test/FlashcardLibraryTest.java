@@ -25,6 +25,8 @@ public class FlashcardLibraryTest {
         for (int i = 0; i < size; i++) {
             lib.addSet(new FlashcardSet(String.valueOf(i)));
         }
+        lib.setName("test");
+        assertEquals("test", lib.getName());
         assertEquals(10, lib.length());
         assertFalse(lib.isEmpty());
         assertEquals("0", lib.getSet("0").getSetName());

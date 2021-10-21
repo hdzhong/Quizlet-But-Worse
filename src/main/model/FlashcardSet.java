@@ -1,11 +1,15 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 // a collection of individual flashcards
-public class FlashcardSet {
+public class FlashcardSet implements Writable {
     private LinkedList<Flashcard> flashcards;
     private String category;
     private boolean completed;
@@ -82,10 +86,10 @@ public class FlashcardSet {
     public boolean isCompleted() {
         for (Flashcard c : flashcards) {
             if (!(c.isCompleted())) {
-                completed = false;
+                this.completed = false;
                 return false;
             } else {
-                completed = true;
+                this.completed = true;
             }
         }
         return true;
@@ -93,7 +97,12 @@ public class FlashcardSet {
 
     //EFFECTS: forces the set to be complete, regardless of the status of individual cards
     public void forceComplete() {
-        completed = true;
+        this.completed = true;
+    }
+
+    //setter
+    public void setCompleted(Boolean b) {
+        this.completed = b;
     }
 
     //EFFECTS: return the size of the set
@@ -107,4 +116,23 @@ public class FlashcardSet {
     }
 
 
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("set name", setName);
+        json.put("category", category);
+        json.put("completed", completed);
+        json.put("cards", cardsToJson());
+        return json;
+    }
+
+    // EFFECTS: returns sets in this library as a JSON array
+    private JSONArray cardsToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Flashcard card : flashcards) {
+            jsonArray.put(card.toJson());
+        }
+        return jsonArray;
+    }
 }

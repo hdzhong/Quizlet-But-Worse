@@ -1,15 +1,30 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 // a collection of flashcard sets
-public class FlashcardLibrary {
+public class FlashcardLibrary implements Writable {
+    private String name;
     private List<FlashcardSet> library;
 
     public FlashcardLibrary() {
         library = new LinkedList<>();
+    }
+
+    //setter
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    //getter
+    public String getName() {
+        return name;
     }
 
     //MODIFIES: this
@@ -94,6 +109,25 @@ public class FlashcardLibrary {
     //EFFECTS: return true if library is empty, false otherwise
     public boolean isEmpty() {
         return library.isEmpty();
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("sets", setsToJson());
+        return json;
+    }
+
+    // EFFECTS: returns sets in this library as a JSON array
+    private JSONArray setsToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (FlashcardSet set : library) {
+            jsonArray.put(set.toJson());
+        }
+
+        return jsonArray;
     }
 
 }

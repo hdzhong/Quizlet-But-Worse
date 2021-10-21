@@ -3,18 +3,33 @@ package ui;
 import model.Flashcard;
 import model.FlashcardLibrary;
 import model.FlashcardSet;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 // This class references code from this CPSC 210 GitHub repo
 // Link: https://github.students.cs.ubc.ca/CPSC210/TellerApp
 
 public class FlashcardApp {
+    private static final String JSON_STORE = "./data/library.json";
     private FlashcardLibrary library;
     private Scanner input;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
     // EFFECTS: runs the teller application
-    public FlashcardApp() {
+    public FlashcardApp() throws FileNotFoundException {
+        input = new Scanner(System.in);
+        System.out.println("Please give the library a name");
+        String name = input.next();
+        library = new FlashcardLibrary();
+        library.setName(name);
+        input.useDelimiter("\n");
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
         runApp();
     }
 
@@ -23,8 +38,6 @@ public class FlashcardApp {
     private void runApp() {
         boolean keepGoing = true;
         String command;
-
-        init();
 
         while (keepGoing) {
             displayMenu();
@@ -56,8 +69,32 @@ public class FlashcardApp {
             viewSet();
         } else if (command.equals("m")) {
             matchCard();
+        } else if (command.equals("s")) {
+            saveLibrary();
+        } else if (command.equals("l")) {
+            loadLibrary();
         } else {
             System.out.println("Selection not valid...");
+        }
+    }
+
+    private void loadLibrary() {
+        try {
+            library = jsonReader.read();
+            System.out.println("Loaded " + library.getName() + " from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
+    }
+
+    private void saveLibrary() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(library);
+            jsonWriter.close();
+            System.out.println("Saved " + library.getName() + " to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
         }
     }
 
@@ -82,6 +119,8 @@ public class FlashcardApp {
         System.out.print("Enter set name: ");
         String name = input.next();
         FlashcardSet set = new FlashcardSet(name);
+        System.out.println("Enter category: ");
+        set.setCategory(input.next());
 
         while (makingSet) {
 
@@ -170,6 +209,8 @@ public class FlashcardApp {
                     continue;
                 } else if (action.equals("c")) {
                     card.markCompleted();
+                    System.out.println("Next card:");
+                    break;
                 } else {
                     viewingCard = false;
                     viewingCards = false;
@@ -250,23 +291,17 @@ public class FlashcardApp {
     }
 
 
-    // MODIFIES: this
-    // EFFECTS: initializes accounts
-    private void init() {
-        library = new FlashcardLibrary();
-        input = new Scanner(System.in);
-        input.useDelimiter("\n");
-    }
-
     // EFFECTS: displays menu of options to user
     private void displayMenu() {
         System.out.println("\nWelcome to Flashcards!:");
         System.out.println("\tv -> View Existing Flashcard Sets");
         System.out.println("\tvc -> List of Completed Sets");
         System.out.println("\te -> View a Set");
-        System.out.println("\tc-> Make a New Set");
+        System.out.println("\tc-> Create a New Set");
         System.out.println("\tm-> Matching Game");
         System.out.println("\td -> Delete a Set");
+        System.out.println("\ts -> Save Library");
+        System.out.println("\tl -> Load Library");
         System.out.println("\tq -> Quit");
     }
 }
