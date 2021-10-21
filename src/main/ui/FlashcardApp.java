@@ -23,10 +23,12 @@ public class FlashcardApp {
     // EFFECTS: runs the teller application
     public FlashcardApp() throws FileNotFoundException {
         input = new Scanner(System.in);
-        System.out.println("Please give the library a name");
-        String name = input.next();
+//        System.out.println("Welcome, what is your name?");
+//        String name = input.next();
         library = new FlashcardLibrary();
-        library.setName(name);
+        library.setName("Douglas' Library");
+//        library.setName(name + "'s Flashcard Library");
+//        System.out.println(library.getName());
         input.useDelimiter("\n");
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
@@ -209,7 +211,6 @@ public class FlashcardApp {
                     continue;
                 } else if (action.equals("c")) {
                     card.markCompleted();
-                    System.out.println("Next card:");
                     break;
                 } else {
                     viewingCard = false;
@@ -254,19 +255,10 @@ public class FlashcardApp {
     //EFFECTS: initializes game where user tries to give the correct definition for the given term
     private void matchCard() {
         boolean matching = true;
-        FlashcardSet current = null;
-        Flashcard card;
-        System.out.print("Enter set you would like to view: ");
-        String name = input.next();
-
-        if (library.getSet(name).getSetName().equals(name)) {
-            current = library.getSet(name);
-        } else {
-            System.out.println("Set does not exist, please try again");
-        }
+        FlashcardSet current = enterFlashcardSet();
 
         while (matching) {
-            card = current.getNextCard();
+            Flashcard card = current.getNextCard();
             printSide(card);
             System.out.println("What is the definition?");
             boolean answering = true;
@@ -284,10 +276,21 @@ public class FlashcardApp {
             }
             if (current.isCompleted()) {
                 matching = false;
-            } else {
-                continue;
             }
         }
+    }
+
+    private FlashcardSet enterFlashcardSet() {
+        FlashcardSet current = null;
+        System.out.print("Enter set you would like to view: ");
+        String name = input.next();
+
+        if (library.getSet(name).getSetName().equals(name)) {
+            current = library.getSet(name);
+        } else {
+            System.out.println("Set does not exist, please try again");
+        }
+        return current;
     }
 
 
