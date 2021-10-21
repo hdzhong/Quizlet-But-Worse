@@ -46,14 +46,16 @@ public class FlashcardApp {
     private void processCommand(String command) {
         if (command.equals("v")) {
             viewSets();
-        } else if (command.equals("c")) {
+        } else if (command.equals("vc")) {
             viewCompletedSets();
-        } else if (command.equals("m")) {
-            makeSet();
+        } else if (command.equals("c")) {
+            createSet();
         } else if (command.equals("d")) {
             removeSet();
         } else if (command.equals("e")) {
             viewSet();
+        } else if (command.equals("m")) {
+            matchCard();
         } else {
             System.out.println("Selection not valid...");
         }
@@ -66,22 +68,22 @@ public class FlashcardApp {
     }
 
     //MODIFIES: this and library (?)
-    //EFFECTS: displays all sets that are marked as complete (not implemented yet)
+    //EFFECTS: displays all sets that are marked as complete
     private void viewCompletedSets() {
         System.out.println(library.completedSets());
     }
 
     //MODIFIES: this
     //EFFECTS: creates set based on user input
-    private void makeSet() {
+    private void createSet() {
         boolean makingSet = true;
         String command;
 
+        System.out.print("Enter set name: ");
+        String name = input.next();
+        FlashcardSet set = new FlashcardSet(name);
 
         while (makingSet) {
-            System.out.print("Enter set name: ");
-            String name = input.next();
-            FlashcardSet set = new FlashcardSet(name);
 
             System.out.println("Add the front of the card: ");
             String front = input.next();
@@ -89,16 +91,16 @@ public class FlashcardApp {
             String back = input.next();
 
             set.addCard(new Flashcard(front, back));
-            library.addSet(set);
 
             System.out.println("Would you like to add more cards? (x to exit, yes to continue)");
             command = input.next();
             makingSet = returnToMenu(true, command);
         }
+        library.addSet(set);
     }
+
     //MODIFIES: this
     //EFFECTS: allows user to view individual cards within a chosen set
-
     private void viewSet() {
         boolean viewingSet = true;
         String command;
@@ -113,12 +115,24 @@ public class FlashcardApp {
                 System.out.println("Set does not exist, please try again");
                 continue;
             }
-
             viewCard(true, current);
-
+            System.out.println("Do you want to see if the set is completed?");
+            String check = input.next();
+            checkComplete(current, check);
             System.out.println("Would you like to view a different set? (press x to exit, yes to continue)");
             command = input.next();
             viewingSet = returnToMenu(true, command);
+        }
+    }
+
+    //EFFECTS: prints out message telling user if the set is completed or not
+    private void checkComplete(FlashcardSet current, String check) {
+        if (check.equals("yes")) {
+            if (current.isCompleted()) {
+                System.out.println("Set is completed!");
+            } else {
+                System.out.println("Set is not completed");
+            }
         }
     }
 
@@ -138,20 +152,38 @@ public class FlashcardApp {
     }
 
     //MODIFIES: this?
-    //EFFECTS: displays the front and back of the current card and can also go to the next card.
+    //EFFECTS: displays the current card and allows users to interact with card.
     private void viewCard(boolean viewingCards, FlashcardSet current) {
         Flashcard card;
         while (viewingCards) {
             card = current.getNextCard();
-            System.out.println("Front: " + card.getFront());
-            System.out.println("Back: " + card.getBack());
-            System.out.println("Press n to go to the next card, x to exit back to set selection");
-            String action = input.next();
-            if (action.equals("n")) {
-                continue;
-            } else {
-                viewingCards = false;
+            printSide(card);
+            System.out.println("f - flip, n - next, c - mark complete, x - exit");
+            boolean viewingCard = true;
+            while (viewingCard) {
+                String action = input.next();
+                if (action.equals("n")) {
+                    break;
+                } else if (action.equals("f")) {
+                    card.changeSide();
+                    printSide(card);
+                    continue;
+                } else if (action.equals("c")) {
+                    card.markCompleted();
+                } else {
+                    viewingCard = false;
+                    viewingCards = false;
+                }
             }
+        }
+    }
+
+    //EFFECT: prints out the currents side of the card
+    private void printSide(Flashcard card) {
+        if (card.getSide()) {
+            System.out.println("Front: " + card.getFront());
+        } else if (!card.getSide()) {
+            System.out.println("Back: " + card.getBack());
         }
     }
 
@@ -177,6 +209,46 @@ public class FlashcardApp {
         }
     }
 
+    //MODIFIES: this
+    //EFFECTS: initializes game where user tries to give the correct definition for the given term
+    private void matchCard() {
+        boolean matching = true;
+        FlashcardSet current = null;
+        Flashcard card;
+        System.out.print("Enter set you would like to view: ");
+        String name = input.next();
+
+        if (library.getSet(name).getSetName().equals(name)) {
+            current = library.getSet(name);
+        } else {
+            System.out.println("Set does not exist, please try again");
+        }
+
+        while (matching) {
+            card = current.getNextCard();
+            printSide(card);
+            System.out.println("What is the definition?");
+            boolean answering = true;
+            while (answering) {
+                String answer = input.next();
+                String cleaned = answer.toLowerCase().replaceAll("\\p{P}", "");
+                if (cleaned.equals(card.getBack().toLowerCase().replaceAll("\\p{P}", ""))) {
+                    System.out.println("That's correct!");
+                    card.markCompleted();
+                    answering = false;
+                } else {
+                    System.out.println("That is incorrect, please try again");
+                    continue;
+                }
+            }
+            if (current.isCompleted()) {
+                matching = false;
+            } else {
+                continue;
+            }
+        }
+    }
+
 
     // MODIFIES: this
     // EFFECTS: initializes accounts
@@ -190,9 +262,10 @@ public class FlashcardApp {
     private void displayMenu() {
         System.out.println("\nWelcome to Flashcards!:");
         System.out.println("\tv -> View Existing Flashcard Sets");
-        System.out.println("\tc -> List of Completed Sets");
+        System.out.println("\tvc -> List of Completed Sets");
         System.out.println("\te -> View a Set");
-        System.out.println("\tm -> Make a New Set");
+        System.out.println("\tc-> Make a New Set");
+        System.out.println("\tm-> Matching Game");
         System.out.println("\td -> Delete a Set");
         System.out.println("\tq -> Quit");
     }

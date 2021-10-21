@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+// a collection of individual flashcards
 public class FlashcardSet {
     private LinkedList<Flashcard> flashcards;
     private String category;
@@ -48,12 +49,13 @@ public class FlashcardSet {
         return null;
     }
 
+    //MODIFIES: this
+    //EFFECTS: pops and returns the first flashcard in the list then adds that card back to the end of the set.
     public Flashcard getNextCard() {
         current = flashcards.pop();
         flashcards.offer(current);
         return current;
     }
-
 
     //MODIFIES: this
     //EFFECTS: adds new card to FlashcardSet
@@ -81,11 +83,12 @@ public class FlashcardSet {
         for (Flashcard c : flashcards) {
             if (!(c.isCompleted())) {
                 completed = false;
+                return false;
             } else {
                 completed = true;
             }
         }
-        return completed;
+        return true;
     }
 
     //EFFECTS: forces the set to be complete, regardless of the status of individual cards

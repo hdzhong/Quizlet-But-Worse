@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+// a collection of flashcard sets
 public class FlashcardLibrary {
     private List<FlashcardSet> library;
 

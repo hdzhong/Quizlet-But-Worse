@@ -21,7 +21,7 @@ public class FlashcardTest {
     public void completeTest() {
         card.markCompleted();
         assertTrue(card.isCompleted());
-        assertFalse(card.markCompleted());
+        assertTrue(card.markCompleted());
     }
 
     @Test
@@ -32,7 +32,12 @@ public class FlashcardTest {
         assertEquals("World", card.getBack());
     }
 
-
+    @Test
+    public void sideTest() {
+        assertTrue(card.getSide());
+        card.changeSide();
+        assertFalse(card.getSide());
+    }
 
 
 }

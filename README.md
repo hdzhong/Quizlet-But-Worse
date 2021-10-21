@@ -31,3 +31,7 @@ be a very useful tool to create and tailor to my own needs.
 - As a user, I want to be able to delete individual flash cards and sets
 - As a user, I want to be able to mark sets and individual cards as complete and see which ones are not completed
 - As a user, I want to be able to sort my flashcard sets by categories
+
+### Phase 2
+- As a user, I want to be able to save my flashcard sets and individual cards
+- As a user, when I open the app, I want the option to be able to load my previous sets
