@@ -37,6 +37,8 @@ public class FlashcardTest {
         assertTrue(card.getSide());
         card.changeSide();
         assertFalse(card.getSide());
+        card.changeSide();
+        assertTrue(card.getSide());
     }
 
 

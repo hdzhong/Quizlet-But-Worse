@@ -27,6 +27,11 @@ public class FlashcardLibrary implements Writable {
         return name;
     }
 
+    //getter
+    public List<FlashcardSet> getLibrary() {
+        return library;
+    }
+
     //MODIFIES: this
     //EFFECTS: adds new set to FlashcardLibrary
     public void addSet(FlashcardSet set) {
@@ -83,6 +88,8 @@ public class FlashcardLibrary implements Writable {
         for (FlashcardSet s : library) {
             if (s.isCompleted()) {
                 names.add(s.getSetName());
+            } else {
+                continue;
             }
         }
         return names;
@@ -93,8 +100,10 @@ public class FlashcardLibrary implements Writable {
     public List<String> needToComplete() {
         List<String> names = new ArrayList<>();
         for (FlashcardSet s : library) {
-            if (!(s.isCompleted())) {
+            if (!s.isCompleted()) {
                 names.add(s.getSetName());
+            } else {
+                continue;
             }
         }
         return names;

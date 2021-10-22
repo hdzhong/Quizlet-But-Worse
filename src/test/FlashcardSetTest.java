@@ -42,11 +42,11 @@ public class FlashcardSetTest {
         for (int i = 0; i < 3; i++) {
             set.addCard(new Flashcard(String.valueOf(i), String.valueOf(i)));
         }
-        assertFalse(set.isCompleted());
+        assertFalse(set.markCompleted());
         set.getCard("0").markCompleted();
         set.getCard("1").markCompleted();
         set.getCard("2").markCompleted();
-        assertTrue(set.isCompleted());
+        assertTrue(set.markCompleted());
     }
 
 }

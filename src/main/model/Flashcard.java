@@ -59,7 +59,7 @@ public class Flashcard implements Writable {
     //MODIFIES: this
     //EFFECTS: changes the side (true = front, false = back)
     public void changeSide() {
-        side = !(side);
+        side = (!side);
     }
 
     //getter

@@ -83,7 +83,7 @@ public class FlashcardSet implements Writable {
 
     //EFFECTS: if all the cards within the set are completed, mark the set as completed.
     //Otherwise return false.
-    public boolean isCompleted() {
+    public boolean markCompleted() {
         for (Flashcard c : flashcards) {
             if (!(c.isCompleted())) {
                 this.completed = false;
@@ -95,9 +95,9 @@ public class FlashcardSet implements Writable {
         return true;
     }
 
-    //EFFECTS: forces the set to be complete, regardless of the status of individual cards
-    public void forceComplete() {
-        this.completed = true;
+    //getter
+    public boolean isCompleted() {
+        return completed;
     }
 
     //setter

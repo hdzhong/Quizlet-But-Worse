@@ -3,7 +3,6 @@ package persistence;
 import model.FlashcardLibrary;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 

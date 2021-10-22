@@ -75,11 +75,17 @@ public class FlashcardApp {
             saveLibrary();
         } else if (command.equals("l")) {
             loadLibrary();
+        } else if (command.equals("es")) {
+            editSet();
+        } else if (command.equals("a")) {
+            addCards();
         } else {
             System.out.println("Selection not valid...");
         }
     }
 
+    //MODIFIES: library
+    //EFFECTS: loads library if library.json exists
     private void loadLibrary() {
         try {
             library = jsonReader.read();
@@ -89,6 +95,7 @@ public class FlashcardApp {
         }
     }
 
+    //EFFECTS: creates a json with information from the library
     private void saveLibrary() {
         try {
             jsonWriter.open();
@@ -169,7 +176,7 @@ public class FlashcardApp {
     //EFFECTS: prints out message telling user if the set is completed or not
     private void checkComplete(FlashcardSet current, String check) {
         if (check.equals("yes")) {
-            if (current.isCompleted()) {
+            if (current.markCompleted()) {
                 System.out.println("Set is completed!");
             } else {
                 System.out.println("Set is not completed");
@@ -192,7 +199,7 @@ public class FlashcardApp {
         return menu;
     }
 
-    //MODIFIES: this?
+    //MODIFIES: this
     //EFFECTS: displays the current card and allows users to interact with card.
     private void viewCard(boolean viewingCards, FlashcardSet current) {
         Flashcard card;
@@ -229,7 +236,7 @@ public class FlashcardApp {
         }
     }
 
-    //MODIFIES: this
+    //MODIFIES: library
     //EFFECTS: user input to remove specific sets
     private void removeSet() {
         boolean removingSet = true;
@@ -248,6 +255,66 @@ public class FlashcardApp {
             System.out.println("Would you like to remove another set? (press x to exit)");
             command = input.next();
             removingSet = returnToMenu(true, command);
+        }
+    }
+
+    //MODIFIES: library, set
+    //EFFECTS: allows user to edit individual sets of cards
+    private void editSet() {
+        boolean editing = true;
+        FlashcardSet current = enterFlashcardSet();
+        while (editing) {
+            Flashcard card = current.getNextCard();
+            editingCard(current, card, true);
+            editing = false;
+        }
+    }
+
+    //MODIFIES: current FlashcardSet
+    //EFFECTS: allows user to modify individual cards
+    private void editingCard(FlashcardSet current, Flashcard card, boolean sameCard) {
+        while (sameCard) {
+            System.out.println("Front: " + card.getFront() + "\nBack: " + card.getBack());
+            System.out.println("f - edit front, b - edit back, n - next card, d - delete card, x - exit");
+            String edit = input.next();
+            if (edit.equals("f")) {
+                System.out.println(card.getFront());
+                System.out.println("What would you like to change it to?");
+                card.setFront(input.next());
+            } else if (edit.equals("b")) {
+                System.out.println(card.getBack());
+                System.out.println("What would you like to change it to?");
+                card.setBack(input.next());
+            } else if (edit.equals("d")) {
+                current.removeCard(card.getFront());
+                sameCard = false;
+            } else if (edit.equals("x")) {
+                sameCard = false;
+            } else if (edit.equals("n")) {
+                card = current.getNextCard();
+            }
+        }
+    }
+
+    //MODIFIES: library, current FlashcardSet
+    //EFFECTS: allows user to add cards to set
+    private void addCards() {
+        boolean adding = true;
+        FlashcardSet current = enterFlashcardSet();
+        String command;
+        while (adding) {
+            System.out.println("Provide a term for the new card");
+            String front = input.next();
+            System.out.println("Provide a definition for the card");
+            String back = input.next();
+            current.addCard(new Flashcard(front, back));
+            System.out.println("Would you like to add more cards?");
+            command = input.next();
+            if (command.equals("yes")) {
+                continue;
+            } else {
+                adding = false;
+            }
         }
     }
 
@@ -274,15 +341,17 @@ public class FlashcardApp {
                     continue;
                 }
             }
-            if (current.isCompleted()) {
+            if (current.markCompleted()) {
                 matching = false;
             }
         }
     }
 
+    //EFFECTS: enters the given set if the set exists
     private FlashcardSet enterFlashcardSet() {
         FlashcardSet current = null;
-        System.out.print("Enter set you would like to view: ");
+        System.out.println(library.viewLibrary());
+        System.out.print("Type the name of the set you would like to enter: ");
         String name = input.next();
 
         if (library.getSet(name).getSetName().equals(name)) {
@@ -303,6 +372,8 @@ public class FlashcardApp {
         System.out.println("\tc-> Create a New Set");
         System.out.println("\tm-> Matching Game");
         System.out.println("\td -> Delete a Set");
+        System.out.println("\ta -> Add Cards to Set");
+        System.out.println("\tes -> Edit a Set");
         System.out.println("\ts -> Save Library");
         System.out.println("\tl -> Load Library");
         System.out.println("\tq -> Quit");
