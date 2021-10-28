@@ -3,7 +3,8 @@ package model;
 import org.json.JSONObject;
 import persistence.Writable;
 
-// a flashcard that contains a front and back side
+// a flashcard that contains a front and back side,
+// as well as keeps track of the current side and the completion status
 public class Flashcard implements Writable {
     private String front;
     private String back;
@@ -66,6 +67,9 @@ public class Flashcard implements Writable {
     public boolean getSide() {
         return side;
     }
+
+    // This method references code from this CPSC 210 GitHub repo
+    // Link: https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
 
     @Override
     public JSONObject toJson() {

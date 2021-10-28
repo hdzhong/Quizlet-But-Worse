@@ -6,6 +6,9 @@ import org.json.JSONObject;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
+// This class references code from this CPSC 210 GitHub repo
+// Link: https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
+
 // Represents a writer that writes JSON representation of workroom to file
 public class JsonWriter {
     private static final int TAB = 4;

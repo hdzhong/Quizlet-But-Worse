@@ -13,6 +13,9 @@ import java.util.stream.Stream;
 
 import org.json.*;
 
+// This class references code from this CPSC 210 GitHub repo
+// Link: https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
+
 // Represents a reader that reads workroom from JSON data stored in file
 public class JsonReader {
     private String source;
@@ -61,7 +64,7 @@ public class JsonReader {
     }
 
     // MODIFIES: library
-    // EFFECTS: parses thingy from JSON object and adds it to workroom
+    // EFFECTS: parses set from JSON object and adds it to library
     private void addSet(FlashcardLibrary lib, JSONObject jsonObject) {
         String name = jsonObject.getString("set name");
         String category = jsonObject.getString("category");
@@ -76,7 +79,8 @@ public class JsonReader {
         }
         lib.addSet(set);
     }
-
+    // MODIFIES: library, set(?)
+    // EFFECTS: parses flashcards from JSON object and adds it to set within library
     private void addCard(FlashcardSet set, JSONObject jsonObject) {
         String front = jsonObject.getString("front");
         String back = jsonObject.getString("back");

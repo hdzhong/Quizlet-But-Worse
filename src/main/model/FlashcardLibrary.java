@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-// a collection of flashcard sets
+// A collection of flashcard sets. We can add and remove sets of flashcards.
 public class FlashcardLibrary implements Writable {
     private String name;
     private List<FlashcardSet> library;
@@ -120,6 +120,8 @@ public class FlashcardLibrary implements Writable {
         return library.isEmpty();
     }
 
+    // These methods reference code from this CPSC 210 GitHub repo
+    // Link: https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

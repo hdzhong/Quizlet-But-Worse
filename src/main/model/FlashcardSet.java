@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-// a collection of individual flashcards
+// A collection of individual flashcards. Keeps track of whether the set
+// is completed and what the current flashcard set is.
 public class FlashcardSet implements Writable {
     private LinkedList<Flashcard> flashcards;
     private String category;
@@ -115,7 +116,8 @@ public class FlashcardSet implements Writable {
         return flashcards.isEmpty();
     }
 
-
+    // These methods reference code from this CPSC 210 GitHub repo
+    // Link: https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

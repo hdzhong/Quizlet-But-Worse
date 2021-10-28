@@ -10,6 +10,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
+// A user interface that allows users to add, remove, edit, and play with sets of flash cards.
+// Users can also modify individual cards within sets.
+
 // This class references code from this CPSC 210 GitHub repo
 // Link: https://github.students.cs.ubc.ca/CPSC210/TellerApp
 
@@ -84,6 +87,9 @@ public class FlashcardApp {
         }
     }
 
+
+    // This method references code from this CPSC 210 GitHub repo
+    // Link: https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
     //MODIFIES: library
     //EFFECTS: loads library if library.json exists
     private void loadLibrary() {
@@ -95,6 +101,8 @@ public class FlashcardApp {
         }
     }
 
+    // This method references code from this CPSC 210 GitHub repo
+    // Link: https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
     //EFFECTS: creates a json with information from the library
     private void saveLibrary() {
         try {
