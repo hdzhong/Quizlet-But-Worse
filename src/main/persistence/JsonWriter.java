@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 // This class references code from this CPSC 210 GitHub repo
 // Link: https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
 
-// Represents a writer that writes JSON representation of workroom to file
+// Represents a writer that writes JSON representation of library to file
 public class JsonWriter {
     private static final int TAB = 4;
     private PrintWriter writer;
@@ -28,7 +28,7 @@ public class JsonWriter {
     }
 
     // MODIFIES: this
-    // EFFECTS: writes JSON representation of workroom to file
+    // EFFECTS: writes JSON representation of library to file
     public void write(FlashcardLibrary lib) {
         JSONObject json = lib.toJson();
         saveToFile(json.toString(TAB));

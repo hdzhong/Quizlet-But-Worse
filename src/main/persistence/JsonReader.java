@@ -30,7 +30,7 @@ public class JsonReader {
     public FlashcardLibrary read() throws IOException {
         String jsonData = readFile(source);
         JSONObject jsonObject = new JSONObject(jsonData);
-        return parseFlashcardLibary(jsonObject);
+        return parseFlashcardLibrary(jsonObject);
     }
 
     // EFFECTS: reads source file as string and returns it
@@ -45,7 +45,7 @@ public class JsonReader {
     }
 
     // EFFECTS: parses library from JSON object and returns it
-    private FlashcardLibrary parseFlashcardLibary(JSONObject jsonObject) {
+    private FlashcardLibrary parseFlashcardLibrary(JSONObject jsonObject) {
         String name = jsonObject.getString("name");
         FlashcardLibrary lib = new FlashcardLibrary();
         lib.setName(name);
@@ -79,6 +79,7 @@ public class JsonReader {
         }
         lib.addSet(set);
     }
+
     // MODIFIES: library, set(?)
     // EFFECTS: parses flashcards from JSON object and adds it to set within library
     private void addCard(FlashcardSet set, JSONObject jsonObject) {
