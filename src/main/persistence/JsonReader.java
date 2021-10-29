@@ -25,7 +25,7 @@ public class JsonReader {
         this.source = source;
     }
 
-    // EFFECTS: reads workroom from file and returns it;
+    // EFFECTS: reads flashchardlibrary from file and returns it;
     // throws IOException if an error occurs reading data from file
     public FlashcardLibrary read() throws IOException {
         String jsonData = readFile(source);
@@ -44,7 +44,7 @@ public class JsonReader {
         return contentBuilder.toString();
     }
 
-    // EFFECTS: parses library from JSON object and returns it
+    // EFFECTS: parses flashchardlibrary from JSON object and returns it
     private FlashcardLibrary parseFlashcardLibrary(JSONObject jsonObject) {
         String name = jsonObject.getString("name");
         FlashcardLibrary lib = new FlashcardLibrary();
@@ -54,7 +54,7 @@ public class JsonReader {
     }
 
     // MODIFIES: library
-    // EFFECTS: parses sets from JSON object and adds them to library
+    // EFFECTS: parses sets from JSON object and adds them to flashchardlibrary
     private void addLibrary(FlashcardLibrary lib, JSONObject jsonObject) {
         JSONArray jsonArray = jsonObject.getJSONArray("sets");
         for (Object json : jsonArray) {
@@ -64,7 +64,7 @@ public class JsonReader {
     }
 
     // MODIFIES: library
-    // EFFECTS: parses set from JSON object and adds it to library
+    // EFFECTS: parses set from JSON object and adds it to flashchardlibrary
     private void addSet(FlashcardLibrary lib, JSONObject jsonObject) {
         String name = jsonObject.getString("set name");
         String category = jsonObject.getString("category");
@@ -80,8 +80,8 @@ public class JsonReader {
         lib.addSet(set);
     }
 
-    // MODIFIES: library, set(?)
-    // EFFECTS: parses flashcards from JSON object and adds it to set within library
+    // MODIFIES: library, set
+    // EFFECTS: parses flashcards from JSON object and adds it to set within flashchardlibrary
     private void addCard(FlashcardSet set, JSONObject jsonObject) {
         String front = jsonObject.getString("front");
         String back = jsonObject.getString("back");

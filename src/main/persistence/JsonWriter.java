@@ -28,7 +28,7 @@ public class JsonWriter {
     }
 
     // MODIFIES: this
-    // EFFECTS: writes JSON representation of library to file
+    // EFFECTS: writes JSON representation of flashchardlibrary to file
     public void write(FlashcardLibrary lib) {
         JSONObject json = lib.toJson();
         saveToFile(json.toString(TAB));
