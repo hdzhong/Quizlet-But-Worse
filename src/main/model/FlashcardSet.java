@@ -57,9 +57,12 @@ public class FlashcardSet implements Writable {
     //MODIFIES: this
     //EFFECTS: pops and returns the first flashcard in the list then adds that card back to the end of the set.
     public Flashcard getNextCard() {
-        current = flashcards.pop();
-        flashcards.offer(current);
-        return current;
+        if (!flashcards.isEmpty()) {
+            current = flashcards.pop();
+            flashcards.offer(current);
+            return current;
+        }
+        return null;
     }
 
     //MODIFIES: this
