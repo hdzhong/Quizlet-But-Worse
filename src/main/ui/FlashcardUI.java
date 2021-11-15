@@ -28,10 +28,10 @@ public class FlashcardUI extends JFrame implements ActionListener {
         this.currentCard = set.getNextCard();
         FlatLaf.setup(new FlatDarkLaf());
         cardUI = new JFrame();
-        cardUI.setLayout(new CardLayout());
+        cardUI.setLayout(new GridLayout(2, 1));
         controls = new JToolBar();
         keyHandler = new ClickHandler();
-        buttons = new ArrayList<JButton>();
+        buttons = new ArrayList<>();
 
         displayCard();
         cardUI.add(card);
@@ -85,23 +85,42 @@ public class FlashcardUI extends JFrame implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             JButton src = (JButton) e.getSource();
-
             switch (src.getText()) {
                 case "Add Card":
-                    set.addCard(new Flashcard("", ""));
+                    currentCard = new Flashcard("", "");
+                    set.addCard(currentCard);
+                    card.setText(currentCard.getFront());
+                    break;
                 case "Delete Card":
-                    set.removeCard(currentCard.getFront());
+                    Flashcard temp = currentCard;
+                    if (set.length() <= 1) {
+                        currentCard = new Flashcard("", "");
+                        break;
+                    }
+                    currentCard = set.getNextCard();
+                    set.removeCard(temp.getFront());
+                    card.setText(currentCard.getFront());
+                    break;
                 case "Edit Card":
-                    ;
+                    String front = JOptionPane.showInputDialog(cardUI, "Enter the front of the card");
+                    String back = JOptionPane.showInputDialog(cardUI, "Enter the back of the card");
+                    currentCard.setFront(front);
+                    currentCard.setBack(back);
+                    card.setText(currentCard.getFront());
+                    break;
                 case "Next Card":
                     currentCard = set.getNextCard();
-                    cardUI.repaint();
+                    card.setText(currentCard.getFront());
+                    break;
                 case "Exit":
                     cardUI.dispose();
             }
-            if (src.getText().equals(currentCard.getFront()) || src.getText().equals(currentCard.getBack())) {
+            if (src.getText().equals(currentCard.getFront())) {
                 currentCard.changeSide();
-                cardUI.repaint();
+                card.setText(currentCard.getBack());
+            } else if (src.getText().equals(currentCard.getBack())) {
+                currentCard.changeSide();
+                card.setText(currentCard.getFront());
             }
         }
     }
