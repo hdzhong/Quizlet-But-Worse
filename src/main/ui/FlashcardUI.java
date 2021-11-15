@@ -85,36 +85,7 @@ public class FlashcardUI extends JFrame implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             JButton src = (JButton) e.getSource();
-            switch (src.getText()) {
-                case "Add Card":
-                    currentCard = new Flashcard("", "");
-                    set.addCard(currentCard);
-                    card.setText(currentCard.getFront());
-                    break;
-                case "Delete Card":
-                    Flashcard temp = currentCard;
-                    if (set.length() <= 1) {
-                        currentCard = new Flashcard("", "");
-                        break;
-                    }
-                    currentCard = set.getNextCard();
-                    set.removeCard(temp.getFront());
-                    card.setText(currentCard.getFront());
-                    break;
-                case "Edit Card":
-                    String front = JOptionPane.showInputDialog(cardUI, "Enter the front of the card");
-                    String back = JOptionPane.showInputDialog(cardUI, "Enter the back of the card");
-                    currentCard.setFront(front);
-                    currentCard.setBack(back);
-                    card.setText(currentCard.getFront());
-                    break;
-                case "Next Card":
-                    currentCard = set.getNextCard();
-                    card.setText(currentCard.getFront());
-                    break;
-                case "Exit":
-                    cardUI.dispose();
-            }
+            toolbarOptions(src);
             if (src.getText().equals(currentCard.getFront())) {
                 currentCard.changeSide();
                 card.setText(currentCard.getBack());
@@ -122,6 +93,39 @@ public class FlashcardUI extends JFrame implements ActionListener {
                 currentCard.changeSide();
                 card.setText(currentCard.getFront());
             }
+        }
+    }
+
+    private void toolbarOptions(JButton src) {
+        switch (src.getText()) {
+            case "Add Card":
+                currentCard = new Flashcard("", "");
+                set.addCard(currentCard);
+                card.setText(currentCard.getFront());
+                break;
+            case "Delete Card":
+                Flashcard temp = currentCard;
+                if (set.length() <= 1) {
+                    currentCard = new Flashcard("", "");
+                    break;
+                }
+                currentCard = set.getNextCard();
+                set.removeCard(temp.getFront());
+                card.setText(currentCard.getFront());
+                break;
+            case "Edit Card":
+                String front = JOptionPane.showInputDialog(cardUI, "Enter the front of the card");
+                String back = JOptionPane.showInputDialog(cardUI, "Enter the back of the card");
+                currentCard.setFront(front);
+                currentCard.setBack(back);
+                card.setText(currentCard.getFront());
+                break;
+            case "Next Card":
+                currentCard = set.getNextCard();
+                card.setText(currentCard.getFront());
+                break;
+            case "Exit":
+                cardUI.dispose();
         }
     }
 }
