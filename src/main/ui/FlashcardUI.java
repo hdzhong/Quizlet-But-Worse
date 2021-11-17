@@ -1,6 +1,7 @@
 package ui;
 
 import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
 import model.Flashcard;
 import model.FlashcardSet;
@@ -12,7 +13,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlashcardUI extends JFrame implements ActionListener {
+public class FlashcardUI extends JFrame {
     private FlashcardLibraryGUI libraryGUI;
     private FlashcardSet set;
     private Flashcard currentCard;
@@ -22,13 +23,13 @@ public class FlashcardUI extends JFrame implements ActionListener {
     private List<JButton> buttons;
     private ClickHandler keyHandler;
 
-    public FlashcardUI(FlashcardLibraryGUI ui,FlashcardSet set) {
+    public FlashcardUI(FlashcardLibraryGUI ui, FlashcardSet set) {
         this.libraryGUI = ui;
         this.set = set;
         this.currentCard = set.getNextCard();
         FlatLaf.setup(new FlatDarkLaf());
         cardUI = new JFrame();
-        cardUI.setLayout(new GridLayout(2, 1));
+        cardUI.setLayout(new GridLayout(1, 1));
         controls = new JToolBar();
         keyHandler = new ClickHandler();
         buttons = new ArrayList<>();
@@ -46,12 +47,14 @@ public class FlashcardUI extends JFrame implements ActionListener {
         JButton deleteCard = new JButton("Delete Card");
         JButton editCard = new JButton("Edit Card");
         JButton nextCard = new JButton("Next Card");
+        JButton markComplete = new JButton("Mark Completed");
         JButton exitSet = new JButton("Exit");
 
         buttons.add(addCard);
         buttons.add(deleteCard);
         buttons.add(editCard);
         buttons.add(nextCard);
+        buttons.add(markComplete);
         buttons.add(exitSet);
 
         for (JButton button : buttons) {
@@ -75,11 +78,6 @@ public class FlashcardUI extends JFrame implements ActionListener {
         return card;
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
-    }
-
 
     private class ClickHandler implements ActionListener {
         @Override
@@ -99,7 +97,9 @@ public class FlashcardUI extends JFrame implements ActionListener {
     private void toolbarOptions(JButton src) {
         switch (src.getText()) {
             case "Add Card":
-                currentCard = new Flashcard("", "");
+                String front = JOptionPane.showInputDialog(cardUI, "Enter the front of the card");
+                String back = JOptionPane.showInputDialog(cardUI, "Enter the back of the card");
+                currentCard = new Flashcard(front, back);
                 set.addCard(currentCard);
                 card.setText(currentCard.getFront());
                 break;
@@ -114,8 +114,8 @@ public class FlashcardUI extends JFrame implements ActionListener {
                 card.setText(currentCard.getFront());
                 break;
             case "Edit Card":
-                String front = JOptionPane.showInputDialog(cardUI, "Enter the front of the card");
-                String back = JOptionPane.showInputDialog(cardUI, "Enter the back of the card");
+                front = JOptionPane.showInputDialog(cardUI, "Enter the front of the card");
+                back = JOptionPane.showInputDialog(cardUI, "Enter the back of the card");
                 currentCard.setFront(front);
                 currentCard.setBack(back);
                 card.setText(currentCard.getFront());
@@ -123,6 +123,9 @@ public class FlashcardUI extends JFrame implements ActionListener {
             case "Next Card":
                 currentCard = set.getNextCard();
                 card.setText(currentCard.getFront());
+                break;
+            case "Mark Completed":
+                currentCard.markCompleted();
                 break;
             case "Exit":
                 cardUI.dispose();

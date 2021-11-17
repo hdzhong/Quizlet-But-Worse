@@ -34,7 +34,7 @@ public class FlashcardLibraryTest {
         lib.removeSet("0");
 
         assertEquals(9, lib.length());
-        assertEquals("null", lib.getSet("0").getSetName());
+        assertEquals(null, lib.getSet("0"));
 
         assertEquals(9, lib.viewLibrary().size());
         assertFalse(lib.removeSet("0"));

@@ -2,12 +2,14 @@ package ui;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLaf;
+import model.Flashcard;
 import model.FlashcardLibrary;
 
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import model.FlashcardSet;
@@ -18,11 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 public class FlashcardLibraryGUI extends JFrame implements ActionListener {
     public static final int WIDTH = 1000;
     public static final int HEIGHT = 600;
     private JFrame desktop;
+    private JPanel buttons;
     private FlashcardLibrary lib;
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
@@ -42,13 +44,12 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         desktop = new JFrame();
         GroupLayout layout = new GroupLayout(desktop);
         desktop.setLayout(layout);
-        desktop.setLayout(new GridLayout(1,2));
+        desktop.setLayout(new GridLayout(1, 2));
         desktop.setTitle("Flashcards!");
 
-        loadLibrary();
         titlePane();
-        flashcardSetDisplay();
-
+        buttons = flashcardSetDisplay();
+        desktop.add(buttons);
 
         desktop.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         desktop.setSize(WIDTH, HEIGHT);
@@ -58,16 +59,26 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
 
     private JPanel addMenuButtons() {
         JPanel menuOptions = new JPanel();
-        menuOptions.setLayout(new GridLayout(4,2));
+        List<JButton> menu = new ArrayList<>();
+        menuOptions.setLayout(new GridLayout(4, 2));
+
         JButton jb1 = new JButton("Load Library");
         JButton jb2 = new JButton("Save Library");
         JButton jb3 = new JButton("Search Sets");
         JButton jb4 = new JButton("Exit");
-        menuOptions.add(jb1);
-        menuOptions.add(jb2);
-        menuOptions.add(jb3);
-        menuOptions.add(jb4);
 
+        menuOptions.add(jb1);
+        menu.add(jb1);
+        menuOptions.add(jb2);
+        menu.add(jb2);
+        menuOptions.add(jb3);
+        menu.add(jb3);
+        menuOptions.add(jb4);
+        menu.add(jb4);
+
+        for (JButton button: menu) {
+            button.addActionListener(this::actionPerformed);
+        }
         return menuOptions;
     }
 
@@ -78,14 +89,14 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         desktop.add(panel);
     }
 
-    private void flashcardSetDisplay() {
-        GridLayout buttonLayout = new GridLayout(3,3);
-        JPanel buttons = new JPanel(buttonLayout);
+    protected JPanel flashcardSetDisplay() {
+        GridLayout buttonLayout = new GridLayout(3, 3);
+        buttons = new JPanel(buttonLayout);
         List<JButton> buttonList = new ArrayList<>();
         List<String> setList = lib.viewLibrary();
 
         // Adds button with set names
-        for (String set: setList) {
+        for (String set : setList) {
             JButton button = new JButton(set);
             buttonList.add(button);
             buttons.add(button);
@@ -99,23 +110,17 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         buttons.add(addSetButton);
 
         // Adds buttons to fill up slots to 7 buttons
-        for (int i = 0; i < 7 - setList.size(); i++) {
+        for (int i = 0; i < 8 - setList.size(); i++) {
             JButton button = new JButton();
             buttonList.add(button);
             buttons.add(button);
         }
-
-        desktop.add(buttons);
+        return buttons;
     }
-
-//    private void displayAllSets() {
-//        JTabbedPane setView = new JTabbedPane();
-//        setView.addTab("Tab 1", flashcardSetDisplay());
-//        desktop.add(setView);
 
     private JLabel addTitle() {
         JLabel title = new JLabel();
-        title.setText("Quizlet Clone!");
+        title.setText("Flashcards!");
         title.setHorizontalAlignment(JLabel.CENTER);
         title.setVerticalTextPosition(JLabel.TOP);
         title.setFont(new Font("default", Font.PLAIN, 20));
@@ -136,10 +141,52 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         JButton src = (JButton) e.getSource();
         if (src.getText().equals("Add Set")) {
             String name = popup();
-            lib.addSet(new FlashcardSet(name));
-            flashcard = new FlashcardUI(this, lib.getSet(name));
+            if (name != null) {
+                lib.addSet(new FlashcardSet(name));
+                lib.getSet(name).addCard(new Flashcard("", ""));
+                flashcard = new FlashcardUI(this, lib.getSet(name));
+            }
         } else if (lib.getSet(src.getText()) != null) {
             flashcard = new FlashcardUI(this, lib.getSet(src.getText()));
+        }
+        switch (src.getText()) {
+            case "Load Library":
+                loadLibrary();
+                refreshButtons();
+                break;
+            case "Save Library":
+                saveLibrary();
+                break;
+            case "Search Sets":
+                String name = JOptionPane.showInputDialog(desktop, "Enter the set you are looking for: ");
+                if (lib.getSet(name) != null) {
+                    flashcard = new FlashcardUI(this, lib.getSet(src.getText()));
+                } else {
+                    JOptionPane.showMessageDialog(desktop, "Set cannot be found");
+                }
+                break;
+            case "Exit":
+                desktop.dispose();
+        }
+        refreshButtons();
+    }
+
+    private void refreshButtons() {
+        desktop.remove(buttons);
+        buttons = flashcardSetDisplay();
+        desktop.add(buttons);
+        desktop.revalidate();
+        desktop.repaint();
+    }
+
+    private void saveLibrary() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(lib);
+            jsonWriter.close();
+            JOptionPane.showMessageDialog(desktop, "Saved " + lib.getName() + " to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            JOptionPane.showMessageDialog(desktop, "Unable to write to file: " + JSON_STORE);
         }
     }
 
@@ -147,4 +194,5 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         String result = JOptionPane.showInputDialog(desktop, "Enter new set name:");
         return result;
     }
+
 }

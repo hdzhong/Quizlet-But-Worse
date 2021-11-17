@@ -79,7 +79,7 @@ public class FlashcardLibrary implements Writable {
                 return s;
             }
         }
-        return new FlashcardSet("null");
+        return null;
     }
 
     //EFFECTS: returns the names of completed sets. Returns false if there are no completed sets
