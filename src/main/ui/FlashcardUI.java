@@ -1,7 +1,6 @@
 package ui;
 
 import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
 import model.Flashcard;
 import model.FlashcardSet;
@@ -19,7 +18,7 @@ public class FlashcardUI extends JFrame {
     private Flashcard currentCard;
     private JFrame cardUI;
     private JButton card;
-    private JToolBar controls;
+    private JPanel controls;
     private List<JButton> buttons;
     private ClickHandler keyHandler;
 
@@ -29,8 +28,8 @@ public class FlashcardUI extends JFrame {
         this.currentCard = set.getNextCard();
         FlatLaf.setup(new FlatDarkLaf());
         cardUI = new JFrame();
-        cardUI.setLayout(new GridLayout(1, 1));
-        controls = new JToolBar();
+        cardUI.setLayout(new BoxLayout(cardUI.getContentPane(), BoxLayout.Y_AXIS));
+        controls = new JPanel(new FlowLayout());
         keyHandler = new ClickHandler();
         buttons = new ArrayList<>();
 
@@ -39,7 +38,7 @@ public class FlashcardUI extends JFrame {
         addToolButtons();
 
         cardUI.setVisible(true);
-        cardUI.setSize(libraryGUI.WIDTH, libraryGUI.HEIGHT);
+        cardUI.setSize(1000, 600);
     }
 
     private void addToolButtons() {
@@ -61,7 +60,9 @@ public class FlashcardUI extends JFrame {
             button.addActionListener(keyHandler);
             controls.add(button);
         }
-
+        controls.setBackground(Color.lightGray);
+        controls.setPreferredSize(new Dimension(600, 35));
+        cardUI.add(Box.createVerticalGlue());
         cardUI.add(controls);
     }
 
@@ -74,6 +75,12 @@ public class FlashcardUI extends JFrame {
         } else {
             card = new JButton(currentCard.getBack());
         }
+
+        if (currentCard.isCompleted()) {
+            card.setBackground(Color.PINK);
+        }
+        card.setPreferredSize(new Dimension(1000, 565));
+        card.setAlignmentX(Component.LEFT_ALIGNMENT);
         card.addActionListener(keyHandler);
         return card;
     }
@@ -94,6 +101,16 @@ public class FlashcardUI extends JFrame {
         }
     }
 
+    private void refreshCard() {
+        cardUI.remove(card);
+        card = displayCard();
+        cardUI.add(card);
+        cardUI.remove(controls);
+        cardUI.add(controls);
+        cardUI.revalidate();
+        cardUI.repaint();
+    }
+
     private void toolbarOptions(JButton src) {
         switch (src.getText()) {
             case "Add Card":
@@ -101,7 +118,7 @@ public class FlashcardUI extends JFrame {
                 String back = JOptionPane.showInputDialog(cardUI, "Enter the back of the card");
                 currentCard = new Flashcard(front, back);
                 set.addCard(currentCard);
-                card.setText(currentCard.getFront());
+                refreshCard();
                 break;
             case "Delete Card":
                 Flashcard temp = currentCard;
@@ -111,21 +128,22 @@ public class FlashcardUI extends JFrame {
                 }
                 currentCard = set.getNextCard();
                 set.removeCard(temp.getFront());
-                card.setText(currentCard.getFront());
+                refreshCard();
                 break;
             case "Edit Card":
                 front = JOptionPane.showInputDialog(cardUI, "Enter the front of the card");
                 back = JOptionPane.showInputDialog(cardUI, "Enter the back of the card");
                 currentCard.setFront(front);
                 currentCard.setBack(back);
-                card.setText(currentCard.getFront());
+                refreshCard();
                 break;
             case "Next Card":
                 currentCard = set.getNextCard();
-                card.setText(currentCard.getFront());
+                refreshCard();
                 break;
             case "Mark Completed":
                 currentCard.markCompleted();
+                refreshCard();
                 break;
             case "Exit":
                 cardUI.dispose();

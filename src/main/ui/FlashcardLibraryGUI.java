@@ -1,5 +1,6 @@
 package ui;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLaf;
 import model.Flashcard;
@@ -29,18 +30,13 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
     private FlashcardUI flashcard;
-    private static final String JSON_STORE = "./data/library.json";
+    private static String JSON_STORE;
 
 
     public FlashcardLibraryGUI() {
-        FlatLaf.setup(new FlatDarkLaf());
+        FlatLaf.setup(new FlatDarculaLaf());
 
         lib = new FlashcardLibrary();
-        lib.setName("Douglas' Library");
-
-        jsonWriter = new JsonWriter(JSON_STORE);
-        jsonReader = new JsonReader(JSON_STORE);
-
         desktop = new JFrame();
         GroupLayout layout = new GroupLayout(desktop);
         desktop.setLayout(layout);
@@ -128,6 +124,12 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
     }
 
     private void loadLibrary() {
+        JFileChooser fc = new JFileChooser("./data");
+        int res = fc.showOpenDialog(desktop);
+        if (res == JFileChooser.APPROVE_OPTION) {
+            String filepath = fc.getSelectedFile().getAbsolutePath();
+            jsonReader = new JsonReader(filepath);
+        }
         try {
             lib = jsonReader.read();
             System.out.println("Loaded " + lib.getName() + " from " + JSON_STORE);
@@ -160,13 +162,14 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
             case "Search Sets":
                 String name = JOptionPane.showInputDialog(desktop, "Enter the set you are looking for: ");
                 if (lib.getSet(name) != null) {
-                    flashcard = new FlashcardUI(this, lib.getSet(src.getText()));
+                    flashcard = new FlashcardUI(this, lib.getSet(name));
                 } else {
                     JOptionPane.showMessageDialog(desktop, "Set cannot be found");
                 }
                 break;
             case "Exit":
                 desktop.dispose();
+                System.exit(0);
         }
         refreshButtons();
     }
@@ -180,11 +183,14 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
     }
 
     private void saveLibrary() {
+        String filename = JOptionPane.showInputDialog(desktop, "Please give your library a name");
+        JSON_STORE = String.format("./data/%s.json", filename);
+        jsonWriter = new JsonWriter(JSON_STORE);
         try {
             jsonWriter.open();
             jsonWriter.write(lib);
             jsonWriter.close();
-            JOptionPane.showMessageDialog(desktop, "Saved " + lib.getName() + " to " + JSON_STORE);
+            JOptionPane.showMessageDialog(desktop, "Saved to " + JSON_STORE);
         } catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(desktop, "Unable to write to file: " + JSON_STORE);
         }
