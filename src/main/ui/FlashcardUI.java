@@ -3,6 +3,7 @@ package ui;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import model.Flashcard;
 import model.FlashcardSet;
 
@@ -19,7 +20,7 @@ public class FlashcardUI extends JFrame {
     private Flashcard currentCard;
     private JFrame cardUI;
     private JButton card;
-    private JToolBar controls;
+    private JPanel controls;
     private List<JButton> buttons;
     private ClickHandler keyHandler;
 
@@ -27,10 +28,12 @@ public class FlashcardUI extends JFrame {
         this.libraryGUI = ui;
         this.set = set;
         this.currentCard = set.getNextCard();
-        FlatLaf.setup(new FlatDarkLaf());
+        FlatLaf.setup(new FlatIntelliJLaf());
         cardUI = new JFrame();
-        cardUI.setLayout(new GridLayout(1, 1));
-        controls = new JToolBar();
+        cardUI.setSize(1000, 600);
+        cardUI.setResizable(false);
+        cardUI.setLayout(new FlowLayout());
+        controls = new JPanel(new FlowLayout());
         keyHandler = new ClickHandler();
         buttons = new ArrayList<>();
 
@@ -39,7 +42,7 @@ public class FlashcardUI extends JFrame {
         addToolButtons();
 
         cardUI.setVisible(true);
-        cardUI.setSize(libraryGUI.WIDTH, libraryGUI.HEIGHT);
+
     }
 
     private void addToolButtons() {
@@ -61,7 +64,8 @@ public class FlashcardUI extends JFrame {
             button.addActionListener(keyHandler);
             controls.add(button);
         }
-
+        controls.setBackground(Color.lightGray);
+        controls.setPreferredSize(new Dimension(cardUI.getWidth(), 50));
         cardUI.add(controls);
     }
 
@@ -70,10 +74,18 @@ public class FlashcardUI extends JFrame {
         if (currentCard == null) {
             card = new JButton("");
         } else if (currentCard.getSide()) {
-            card = new JButton(currentCard.getFront());
+            card = new JButton("Front: " + currentCard.getFront());
         } else {
-            card = new JButton(currentCard.getBack());
+            card = new JButton("Back: " + currentCard.getBack());
         }
+
+        if (currentCard.isCompleted()) {
+            card.setBackground(Color.PINK);
+        }
+        card.setFont(new Font("Calibri", Font.BOLD, cardUI.getWidth() / 35));
+        card.setPreferredSize(new Dimension(
+                cardUI.getWidth() - 100, cardUI.getHeight() - 115));
+        card.setAlignmentX(Component.LEFT_ALIGNMENT);
         card.addActionListener(keyHandler);
         return card;
     }
@@ -84,14 +96,24 @@ public class FlashcardUI extends JFrame {
         public void actionPerformed(ActionEvent e) {
             JButton src = (JButton) e.getSource();
             toolbarOptions(src);
-            if (src.getText().equals(currentCard.getFront())) {
+            if (src.getText().equals("Front: " + currentCard.getFront())) {
                 currentCard.changeSide();
-                card.setText(currentCard.getBack());
-            } else if (src.getText().equals(currentCard.getBack())) {
+                card.setText("Back: " + currentCard.getBack());
+            } else if (src.getText().equals("Back: " + currentCard.getBack())) {
                 currentCard.changeSide();
-                card.setText(currentCard.getFront());
+                card.setText("Front: " + currentCard.getFront());
             }
         }
+    }
+
+    private void refreshCard() {
+        cardUI.remove(card);
+        card = displayCard();
+        cardUI.add(card);
+        cardUI.remove(controls);
+        cardUI.add(controls);
+        cardUI.revalidate();
+        cardUI.repaint();
     }
 
     private void toolbarOptions(JButton src) {
@@ -101,7 +123,7 @@ public class FlashcardUI extends JFrame {
                 String back = JOptionPane.showInputDialog(cardUI, "Enter the back of the card");
                 currentCard = new Flashcard(front, back);
                 set.addCard(currentCard);
-                card.setText(currentCard.getFront());
+                refreshCard();
                 break;
             case "Delete Card":
                 Flashcard temp = currentCard;
@@ -111,24 +133,28 @@ public class FlashcardUI extends JFrame {
                 }
                 currentCard = set.getNextCard();
                 set.removeCard(temp.getFront());
-                card.setText(currentCard.getFront());
+                refreshCard();
                 break;
             case "Edit Card":
-                front = JOptionPane.showInputDialog(cardUI, "Enter the front of the card");
-                back = JOptionPane.showInputDialog(cardUI, "Enter the back of the card");
+                front = JOptionPane.showInputDialog(
+                        cardUI, "Enter the front of the card", currentCard.getFront());
+                back = JOptionPane.showInputDialog(
+                        cardUI, "Enter the back of the card", currentCard.getBack());
                 currentCard.setFront(front);
                 currentCard.setBack(back);
-                card.setText(currentCard.getFront());
+                refreshCard();
                 break;
             case "Next Card":
                 currentCard = set.getNextCard();
-                card.setText(currentCard.getFront());
+                refreshCard();
                 break;
             case "Mark Completed":
                 currentCard.markCompleted();
+                refreshCard();
                 break;
             case "Exit":
                 cardUI.dispose();
+                libraryGUI.refreshButtons();
         }
     }
 }
