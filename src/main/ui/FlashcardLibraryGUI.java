@@ -1,13 +1,16 @@
 package ui;
 
 import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatArcDarkContrastIJTheme;
 import model.Flashcard;
 import model.FlashcardLibrary;
 
 import java.awt.*;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -21,8 +24,9 @@ import java.util.List;
 
 
 public class FlashcardLibraryGUI extends JFrame implements ActionListener {
-    public static final int WIDTH = 1000;
-    public static final int HEIGHT = 600;
+    protected static int WIDTH;
+    protected static int HEIGHT;
+    public final Dimension screenSize;
     private final JFrame desktop;
     private JPanel buttons;
     protected FlashcardLibrary lib;
@@ -31,13 +35,16 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
 
 
     public FlashcardLibraryGUI() {
-        FlatLaf.setup(new FlatIntelliJLaf());
+        FlatLaf.setup(new FlatArcDarkContrastIJTheme());
         lib = new FlashcardLibrary();
         desktop = new JFrame();
         GroupLayout layout = new GroupLayout(desktop);
         desktop.setLayout(layout);
         desktop.setLayout(new GridLayout(1, 2));
         desktop.setTitle("Quizlet But Worse");
+        screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        WIDTH = (int) (screenSize.width / 1.5);
+        HEIGHT = (int) (screenSize.height / 1.5);
 
         titlePane();
         buttons = flashcardSetDisplay();
@@ -46,9 +53,11 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         desktop.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         desktop.setSize(WIDTH, HEIGHT);
         desktop.setVisible(true);
+
     }
 
-
+    // MODIFIES: this
+    // EFFECTS: creates a new JPanel that holds 4 menu buttons that can respond to clicks
     private JPanel addMenuButtons() {
         JPanel menuOptions = new JPanel();
         List<JButton> menu = new ArrayList<>();
@@ -69,7 +78,7 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         menu.add(jb4);
 
         for (JButton button: menu) {
-            button.addActionListener(this::actionPerformed);
+            button.addActionListener(this);
         }
         return menuOptions;
     }
@@ -82,7 +91,7 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
     }
 
     protected JPanel flashcardSetDisplay() {
-        GridLayout buttonLayout = new GridLayout(3, 3);
+        GridLayout buttonLayout = new GridLayout(3,3);
         buttons = new JPanel(buttonLayout);
         List<String> setList = lib.viewLibrary();
 
@@ -90,15 +99,15 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         for (String set : setList) {
             JButton button = new JButton(set);
             if (lib.getSet(set).markCompleted()) {
-                button.setBackground(Color.PINK);
+                button.setBackground(new Color(34, 254, 148, 46));
             }
             buttons.add(button);
-            button.addActionListener(this::actionPerformed);
+            button.addActionListener(this);
         }
 
         // Adds 9th button to for an Add Set button
         JButton addSetButton = new JButton("Add Set");
-        addSetButton.addActionListener(this::actionPerformed);
+        addSetButton.addActionListener(this);
         buttons.add(addSetButton);
 
         // Add buttons to fill up slots to 7 buttons
@@ -110,18 +119,15 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
     }
 
     private JLabel addTitle() {
-        JLabel title = new JLabel();
-        title.setText("Flashcards!");
-        title.setHorizontalAlignment(JLabel.CENTER);
-        title.setVerticalTextPosition(JLabel.TOP);
-        Font titleFont = null;
+        BufferedImage logo = null;
         try {
-            titleFont = Font.createFont(Font.TRUETYPE_FONT, new File("./fonts/RobotoSlab-ExtraBold.ttf"));
-        } catch (Exception e) {
+            logo = ImageIO.read(new File("./img/quizlet.png"));
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        Font sizedFont = titleFont.deriveFont(30f);
-        title.setFont(sizedFont);
+        JLabel title = new JLabel(new ImageIcon(logo));
+        title.setHorizontalAlignment(JLabel.CENTER);
+        title.setVerticalTextPosition(JLabel.TOP);
         return title;
     }
 
@@ -143,6 +149,11 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton src = (JButton) e.getSource();
+        selectSet(src);
+        selectMenuOptions(src);
+    }
+
+    private void selectSet(JButton src) {
         if (src.getText().equals("Add Set")) {
             String name = JOptionPane.showInputDialog(desktop, "Enter new set name:");
             if (name != null) {
@@ -151,6 +162,9 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         } else if (lib.getSet(src.getText()) != null) {
             new FlashcardUI(this, lib.getSet(src.getText()));
         }
+    }
+
+    private void selectMenuOptions(JButton src) {
         switch (src.getText()) {
             case "Load Library":
                 loadLibrary();

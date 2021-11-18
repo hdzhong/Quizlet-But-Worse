@@ -1,7 +1,7 @@
 package ui;
 
-import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatArcDarkContrastIJTheme;
 import model.Flashcard;
 import model.FlashcardSet;
 
@@ -26,9 +26,9 @@ public class FlashcardUI extends JFrame {
         this.libraryGUI = ui;
         this.set = set;
         this.currentCard = set.getNextCard();
-        FlatLaf.setup(new FlatIntelliJLaf());
+        FlatLaf.setup(new FlatArcDarkContrastIJTheme());
         cardUI = new JFrame();
-        cardUI.setSize(1000, 600);
+        cardUI.setSize(FlashcardLibraryGUI.WIDTH, FlashcardLibraryGUI.HEIGHT);
         cardUI.setResizable(false);
         cardUI.setLayout(new FlowLayout());
         controls = new JPanel(new FlowLayout());
@@ -62,8 +62,8 @@ public class FlashcardUI extends JFrame {
             button.addActionListener(keyHandler);
             controls.add(button);
         }
-        controls.setBackground(Color.lightGray);
-        controls.setPreferredSize(new Dimension(cardUI.getWidth(), 50));
+        controls.setPreferredSize(new Dimension(cardUI.getWidth(), (int) (cardUI.getHeight() * 0.2)));
+        controls.setMinimumSize(new Dimension(cardUI.getWidth(), nextCard.getHeight()));
         cardUI.add(controls);
     }
 
@@ -76,16 +76,19 @@ public class FlashcardUI extends JFrame {
         } else {
             card = new JButton("Back: " + currentCard.getBack());
         }
-
         if (currentCard.isCompleted()) {
-            card.setBackground(Color.PINK);
+            card.setBackground(new Color(34, 254, 148, 46));
         }
+        cardProperties();
+        return card;
+    }
+
+    private void cardProperties() {
         card.setFont(new Font("Calibri", Font.BOLD, cardUI.getWidth() / 35));
         card.setPreferredSize(new Dimension(
-                cardUI.getWidth() - 100, cardUI.getHeight() - 115));
+                cardUI.getWidth() - 100, (int) (cardUI.getHeight() * 0.88)));
         card.setAlignmentX(Component.LEFT_ALIGNMENT);
         card.addActionListener(keyHandler);
-        return card;
     }
 
 
