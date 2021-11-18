@@ -23,18 +23,15 @@ import java.util.List;
 public class FlashcardLibraryGUI extends JFrame implements ActionListener {
     public static final int WIDTH = 1000;
     public static final int HEIGHT = 600;
-    private JFrame desktop;
+    private final JFrame desktop;
     private JPanel buttons;
-    private FlashcardLibrary lib;
-    private JsonWriter jsonWriter;
+    protected FlashcardLibrary lib;
     private JsonReader jsonReader;
-    private FlashcardUI flashcard;
     private static String JSON_STORE;
 
 
     public FlashcardLibraryGUI() {
         FlatLaf.setup(new FlatIntelliJLaf());
-
         lib = new FlashcardLibrary();
         desktop = new JFrame();
         GroupLayout layout = new GroupLayout(desktop);
@@ -87,7 +84,6 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
     protected JPanel flashcardSetDisplay() {
         GridLayout buttonLayout = new GridLayout(3, 3);
         buttons = new JPanel(buttonLayout);
-        List<JButton> buttonList = new ArrayList<>();
         List<String> setList = lib.viewLibrary();
 
         // Adds button with set names
@@ -96,7 +92,6 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
             if (lib.getSet(set).markCompleted()) {
                 button.setBackground(Color.PINK);
             }
-            buttonList.add(button);
             buttons.add(button);
             button.addActionListener(this::actionPerformed);
         }
@@ -104,13 +99,11 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         // Adds 9th button to for an Add Set button
         JButton addSetButton = new JButton("Add Set");
         addSetButton.addActionListener(this::actionPerformed);
-        buttonList.add(addSetButton);
         buttons.add(addSetButton);
 
-        // Adds buttons to fill up slots to 7 buttons
+        // Add buttons to fill up slots to 7 buttons
         for (int i = 0; i < 8 - setList.size(); i++) {
             JButton button = new JButton();
-            buttonList.add(button);
             buttons.add(button);
         }
         return buttons;
@@ -124,9 +117,7 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         Font titleFont = null;
         try {
             titleFont = Font.createFont(Font.TRUETYPE_FONT, new File("./fonts/RobotoSlab-ExtraBold.ttf"));
-        } catch (FontFormatException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         Font sizedFont = titleFont.deriveFont(30f);
@@ -153,14 +144,12 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         JButton src = (JButton) e.getSource();
         if (src.getText().equals("Add Set")) {
-            String name = popup();
+            String name = JOptionPane.showInputDialog(desktop, "Enter new set name:");
             if (name != null) {
-                lib.addSet(new FlashcardSet(name));
-                lib.getSet(name).addCard(new Flashcard("", ""));
-                flashcard = new FlashcardUI(this, lib.getSet(name));
+                createCard(name);
             }
         } else if (lib.getSet(src.getText()) != null) {
-            flashcard = new FlashcardUI(this, lib.getSet(src.getText()));
+            new FlashcardUI(this, lib.getSet(src.getText()));
         }
         switch (src.getText()) {
             case "Load Library":
@@ -171,18 +160,26 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
                 saveLibrary();
                 break;
             case "Search Sets":
-                String name = JOptionPane.showInputDialog(desktop, "Enter the set you are looking for: ");
-                if (lib.getSet(name) != null) {
-                    flashcard = new FlashcardUI(this, lib.getSet(name));
-                } else {
-                    JOptionPane.showMessageDialog(desktop, "Set cannot be found");
-                }
+                searchSets();
                 break;
             case "Exit":
-                desktop.dispose();
                 System.exit(0);
         }
-//        refreshButtons();
+    }
+
+    private void createCard(String name) {
+        lib.addSet(new FlashcardSet(name));
+        lib.getSet(name).addCard(new Flashcard("", ""));
+        new FlashcardUI(this, lib.getSet(name));
+    }
+
+    private void searchSets() {
+        String name = JOptionPane.showInputDialog(desktop, "Enter the set you are looking for: ");
+        if (lib.getSet(name) != null) {
+            new FlashcardUI(this, lib.getSet(name));
+        } else {
+            JOptionPane.showMessageDialog(desktop, "Set cannot be found");
+        }
     }
 
     protected void refreshButtons() {
@@ -196,7 +193,7 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
     private void saveLibrary() {
         String filename = JOptionPane.showInputDialog(desktop, "Please give your library a name");
         JSON_STORE = String.format("./data/%s.json", filename);
-        jsonWriter = new JsonWriter(JSON_STORE);
+        JsonWriter jsonWriter = new JsonWriter(JSON_STORE);
         try {
             jsonWriter.open();
             jsonWriter.write(lib);
@@ -206,10 +203,4 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(desktop, "Unable to write to file: " + JSON_STORE);
         }
     }
-
-    public String popup() {
-        String result = JOptionPane.showInputDialog(desktop, "Enter new set name:");
-        return result;
-    }
-
 }

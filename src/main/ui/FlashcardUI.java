@@ -1,9 +1,7 @@
 package ui;
 
-import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.FlatLightLaf;
 import model.Flashcard;
 import model.FlashcardSet;
 
@@ -15,14 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FlashcardUI extends JFrame {
-    private FlashcardLibraryGUI libraryGUI;
-    private FlashcardSet set;
+    private final FlashcardLibraryGUI libraryGUI;
+    private final FlashcardSet set;
     private Flashcard currentCard;
-    private JFrame cardUI;
+    private final JFrame cardUI;
     private JButton card;
-    private JPanel controls;
-    private List<JButton> buttons;
-    private ClickHandler keyHandler;
+    private final JPanel controls;
+    private final List<JButton> buttons;
+    private final ClickHandler keyHandler;
 
     public FlashcardUI(FlashcardLibraryGUI ui, FlashcardSet set) {
         this.libraryGUI = ui;
@@ -119,30 +117,13 @@ public class FlashcardUI extends JFrame {
     private void toolbarOptions(JButton src) {
         switch (src.getText()) {
             case "Add Card":
-                String front = JOptionPane.showInputDialog(cardUI, "Enter the front of the card");
-                String back = JOptionPane.showInputDialog(cardUI, "Enter the back of the card");
-                currentCard = new Flashcard(front, back);
-                set.addCard(currentCard);
-                refreshCard();
+                addCard();
                 break;
             case "Delete Card":
-                Flashcard temp = currentCard;
-                if (set.length() <= 1) {
-                    currentCard = new Flashcard("", "");
-                    break;
-                }
-                currentCard = set.getNextCard();
-                set.removeCard(temp.getFront());
-                refreshCard();
+                deleteCard();
                 break;
             case "Edit Card":
-                front = JOptionPane.showInputDialog(
-                        cardUI, "Enter the front of the card", currentCard.getFront());
-                back = JOptionPane.showInputDialog(
-                        cardUI, "Enter the back of the card", currentCard.getBack());
-                currentCard.setFront(front);
-                currentCard.setBack(back);
-                refreshCard();
+                editCard();
                 break;
             case "Next Card":
                 currentCard = set.getNextCard();
@@ -156,5 +137,45 @@ public class FlashcardUI extends JFrame {
                 cardUI.dispose();
                 libraryGUI.refreshButtons();
         }
+    }
+
+    private void deleteCard() {
+        Flashcard temp = currentCard;
+        if (set.length() == 1) {
+            removeSet();
+        }
+        currentCard = set.getNextCard();
+        set.removeCard(temp.getFront());
+        refreshCard();
+    }
+
+    private void removeSet() {
+        int r = JOptionPane.showConfirmDialog(
+                cardUI,
+                "Would you like to delete this set?");
+        if (r == JOptionPane.YES_OPTION) {
+            libraryGUI.lib.removeSet(set.getSetName());
+            cardUI.dispose();
+        }
+    }
+
+    private void editCard() {
+        String front = JOptionPane.showInputDialog(
+                cardUI, "Enter the front of the card", currentCard.getFront());
+        String back = JOptionPane.showInputDialog(
+                cardUI, "Enter the back of the card", currentCard.getBack());
+        if (front != null || back != null) {
+            currentCard.setFront(front);
+            currentCard.setBack(back);
+            refreshCard();
+        }
+    }
+
+    private void addCard() {
+        String front = JOptionPane.showInputDialog(cardUI, "Enter the front of the card");
+        String back = JOptionPane.showInputDialog(cardUI, "Enter the back of the card");
+        currentCard = new Flashcard(front, back);
+        set.addCard(currentCard);
+        refreshCard();
     }
 }
