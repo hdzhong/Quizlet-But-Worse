@@ -29,6 +29,7 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
     public final Dimension screenSize;
     private final JFrame desktop;
     private JPanel buttons;
+    private JScrollPane scroll;
     protected FlashcardLibrary lib;
     private JsonReader jsonReader;
     private static String JSON_STORE;
@@ -38,9 +39,10 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         FlatLaf.setup(new FlatArcDarkContrastIJTheme());
         lib = new FlashcardLibrary();
         desktop = new JFrame();
-        GroupLayout layout = new GroupLayout(desktop);
-        desktop.setLayout(layout);
-        desktop.setLayout(new GridLayout(1, 2));
+//        GroupLayout layout = new GroupLayout(desktop);
+//        desktop.setLayout(layout);
+//        desktop.setLayout(new GridLayout(1, 2));
+        desktop.setLayout(new FlowLayout());
         desktop.setTitle("Quizlet But Worse");
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         WIDTH = (int) (screenSize.width / 1.5);
@@ -48,10 +50,14 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
 
         titlePane();
         buttons = flashcardSetDisplay();
-        desktop.add(buttons);
+        scroll = new JScrollPane(
+                buttons, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scroll.setPreferredSize(new Dimension((int) (WIDTH * 0.56), HEIGHT));
+        desktop.add(scroll);
 
         desktop.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        desktop.setSize(WIDTH, HEIGHT);
+        desktop.setSize(WIDTH, HEIGHT + 85);
+        desktop.setMinimumSize(new Dimension(WIDTH, HEIGHT + 85));
         desktop.setVisible(true);
 
     }
@@ -87,12 +93,15 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         JPanel panel = new JPanel(new GridLayout(2, 1));
         panel.add(addTitle());
         panel.add(addMenuButtons());
+        panel.setPreferredSize(new Dimension((int) (WIDTH * 0.40), HEIGHT));
         desktop.add(panel);
     }
 
+
     protected JPanel flashcardSetDisplay() {
-        GridLayout buttonLayout = new GridLayout(3,3);
-        buttons = new JPanel(buttonLayout);
+//        GridLayout buttonLayout = new GridLayout(3,3);
+//        buttons = new JPanel(buttonLayout);
+        buttons = new JPanel(new FlowLayout());
         List<String> setList = lib.viewLibrary();
 
         // Adds button with set names
@@ -102,20 +111,31 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
                 button.setBackground(new Color(34, 254, 148, 46));
             }
             buttons.add(button);
+            setButtonSize(button);
             button.addActionListener(this);
         }
 
         // Adds 9th button to for an Add Set button
         JButton addSetButton = new JButton("Add Set");
         addSetButton.addActionListener(this);
+        setButtonSize(addSetButton);
         buttons.add(addSetButton);
 
         // Add buttons to fill up slots to 7 buttons
-        for (int i = 0; i < 8 - setList.size(); i++) {
+        for (int i = 0; i < 15 - setList.size(); i++) {
             JButton button = new JButton();
             buttons.add(button);
+            setButtonSize(button);
         }
+        buttons.setPreferredSize(new Dimension((int) (WIDTH * 0.56), HEIGHT));
+        buttons.setVisible(true);
         return buttons;
+    }
+
+    private void setButtonSize(JButton button) {
+        button.setMinimumSize(new Dimension((int) (WIDTH * 0.18), (int)(HEIGHT * 0.2)));
+        button.setPreferredSize(new Dimension((int) (WIDTH * 0.18), (int)(HEIGHT * 0.2)));
+        button.setMaximumSize(new Dimension((int) (WIDTH * 0.18), (int)(HEIGHT * 0.2)));
     }
 
     private JLabel addTitle() {
@@ -197,9 +217,18 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
     }
 
     protected void refreshButtons() {
-        desktop.remove(buttons);
+//        desktop.remove(buttons);
+//        buttons = flashcardSetDisplay();
+//        desktop.add(buttons);
+//        desktop.revalidate();
+//        desktop.repaint();
+        scroll.remove(buttons);
         buttons = flashcardSetDisplay();
-        desktop.add(buttons);
+        scroll.add(buttons);
+        scroll.revalidate();
+        scroll.repaint();
+//        desktop.remove(scroll);
+//        desktop.add(scroll);
         desktop.revalidate();
         desktop.repaint();
     }

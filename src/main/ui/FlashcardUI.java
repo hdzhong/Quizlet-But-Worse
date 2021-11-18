@@ -86,7 +86,7 @@ public class FlashcardUI extends JFrame {
     private void cardProperties() {
         card.setFont(new Font("Calibri", Font.BOLD, cardUI.getWidth() / 35));
         card.setPreferredSize(new Dimension(
-                cardUI.getWidth() - 100, (int) (cardUI.getHeight() * 0.88)));
+                cardUI.getWidth() - 100, (int) (cardUI.getHeight() * 0.84)));
         card.setAlignmentX(Component.LEFT_ALIGNMENT);
         card.addActionListener(keyHandler);
     }
