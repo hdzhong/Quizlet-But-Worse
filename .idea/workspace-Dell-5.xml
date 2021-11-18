@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="4a52a302-d5aa-4e0f-b235-2c86f0c4e083" name="Changes" comment="refactored a few methods in FlashcardUI">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/material_ui_swing_1_1_2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace-Dell.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/ui/FlashcardGUI2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/ui/MenuPanel.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="fbb44503735930569c30fbf2043ecf5420d4ea37" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="ProjectId" id="1zITbW6I8MEn9ahCAnlRfYSWCZo" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/src/test" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.5178849" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.import" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="model" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\OneDrive - alumni.ubc.ca\UBC\BCS Degree\CPSC210\Project\lib" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="persistence" />
+      <recent name="" />
+      <recent name="test" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="ui.Main" />
+      <module name="Project-Starter" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ui.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="FlashcardLibraryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Project-Starter" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="FlashcardLibraryTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="JsonReaderTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Project-Starter" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="persistence.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="persistence" />
+      <option name="MAIN_CLASS_NAME" value="persistence.JsonReaderTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="json-20210307.jar" type="JarApplication" temporary="true">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/lib/json-20210307.jar" />
+      <method v="2" />
+    </configuration>
+    <configuration name="material-ui-swing-1.1.2.jar" type="JarApplication" temporary="true">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/lib/material-ui-swing-1.1.2.jar" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+        <item itemvalue="JAR Application.json-20210307.jar" />
+        <item itemvalue="JAR Application.material-ui-swing-1.1.2.jar" />
+        <item itemvalue="JUnit.JsonReaderTest" />
+        <item itemvalue="JUnit.FlashcardLibraryTest" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4a52a302-d5aa-4e0f-b235-2c86f0c4e083" name="Changes" comment="" />
+      <created>1633834675240</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1633834675240</updated>
+      <workItem from="1633834676662" duration="492000" />
+      <workItem from="1633844368637" duration="2684000" />
+      <workItem from="1634097853136" duration="2670000" />
+      <workItem from="1634196620653" duration="359000" />
+      <workItem from="1634240550981" duration="2506000" />
+      <workItem from="1634245134423" duration="2507000" />
+      <workItem from="1634254330784" duration="3090000" />
+      <workItem from="1634263826856" duration="21691000" />
+      <workItem from="1634317272646" duration="557000" />
+      <workItem from="1634318129745" duration="9000" />
+      <workItem from="1634318619770" duration="1536000" />
+      <workItem from="1634322784420" duration="1545000" />
+      <workItem from="1634513191306" duration="34000" />
+      <workItem from="1634576122893" duration="12000" />
+      <workItem from="1634782474324" duration="18639000" />
+      <workItem from="1634832132055" duration="37000" />
+      <workItem from="1634835043750" duration="2364000" />
+      <workItem from="1634845051948" duration="2225000" />
+      <workItem from="1634847670741" duration="2949000" />
+      <workItem from="1634876306515" duration="2974000" />
+      <workItem from="1634879315190" duration="3000" />
+      <workItem from="1634881841722" duration="265000" />
+      <workItem from="1634922245585" duration="171000" />
+      <workItem from="1635056268298" duration="117000" />
+      <workItem from="1635133181664" duration="263000" />
+      <workItem from="1635141689883" duration="674000" />
+      <workItem from="1635143111410" duration="738000" />
+      <workItem from="1635181059215" duration="604000" />
+      <workItem from="1635183062031" duration="100000" />
+      <workItem from="1635218202847" duration="596000" />
+      <workItem from="1635373156361" duration="405000" />
+      <workItem from="1635449873155" duration="416000" />
+      <workItem from="1635454535881" duration="3588000" />
+      <workItem from="1635462817748" duration="117000" />
+      <workItem from="1635462970471" duration="77000" />
+      <workItem from="1635482179588" duration="33000" />
+      <workItem from="1635482364598" duration="455000" />
+      <workItem from="1635482976625" duration="1250000" />
+      <workItem from="1635527418358" duration="84000" />
+      <workItem from="1635786030736" duration="186000" />
+      <workItem from="1635795115618" duration="934000" />
+      <workItem from="1635800244700" duration="253000" />
+      <workItem from="1635802911858" duration="618000" />
+      <workItem from="1635927382509" duration="596000" />
+      <workItem from="1635958842986" duration="86000" />
+      <workItem from="1635958996249" duration="7000" />
+      <workItem from="1635959046975" duration="146000" />
+      <workItem from="1635960537817" duration="591000" />
+      <workItem from="1635967057049" duration="1830000" />
+      <workItem from="1636043680417" duration="15000" />
+      <workItem from="1636045181294" duration="542000" />
+      <workItem from="1636615417747" duration="5339000" />
+      <workItem from="1636665952324" duration="2578000" />
+      <workItem from="1636704059158" duration="751000" />
+      <workItem from="1636855017405" duration="9767000" />
+      <workItem from="1636921982461" duration="530000" />
+      <workItem from="1636923877528" duration="245000" />
+      <workItem from="1636929899383" duration="3039000" />
+      <workItem from="1636948578449" duration="540000" />
+      <workItem from="1636949314446" duration="31000" />
+      <workItem from="1636999283221" duration="191000" />
+      <workItem from="1636999647054" duration="9000" />
+      <workItem from="1637014968336" duration="6000" />
+    </task>
+    <task id="LOCAL-00001" summary="added readme with initial description of the project and some user stories">
+      <created>1633849480910</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1633849480910</updated>
+    </task>
+    <task id="LOCAL-00002" summary="updated readmes, added stubs, began adding tests and implementation">
+      <created>1634246867317</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1634246867317</updated>
+    </task>
+    <task id="LOCAL-00003" summary="tests all current pass (missing some tests) and initial ui is working">
+      <created>1634282283755</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1634282283755</updated>
+    </task>
+    <task id="LOCAL-00004" summary="added and cleaned up some tests, improved ui">
+      <created>1634286611067</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1634286611067</updated>
+    </task>
+    <task id="LOCAL-00005" summary="updated proposal and user stories">
+      <created>1634287146189</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1634287146189</updated>
+    </task>
+    <task id="LOCAL-00006" summary="fixed file structure">
+      <created>1634287274701</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1634287274701</updated>
+    </task>
+    <task id="LOCAL-00007" summary="increased code coverage for FlashcardSetTest">
+      <created>1634287717568</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1634287717568</updated>
+    </task>
+    <task id="LOCAL-00008" summary="fixed bug in FlashcardApp">
+      <created>1634289423685</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1634289423685</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Added to readme and cleaned up displayMenu">
+      <created>1634317764695</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1634317764695</updated>
+    </task>
+    <task id="LOCAL-00010" summary="added citation for FlashcardApp and fixed removeSet">
+      <created>1634324949198</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1634324949198</updated>
+    </task>
+    <task id="LOCAL-00011" summary="removed functionality from removeSet to reduce method length">
+      <created>1634325070563</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1634325070563</updated>
+    </task>
+    <task id="LOCAL-00012" summary="updated some basic methods in model, added matchSet() to FlashcardApp, updated user stories in README.md">
+      <created>1634791332557</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1634791332557</updated>
+    </task>
+    <task id="LOCAL-00013" summary="initial implementation of saving and loading flashcard libraries">
+      <created>1634798075824</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1634798075824</updated>
+    </task>
+    <task id="LOCAL-00014" summary="added more tests for JsonReaderTest and JsonWriterTest">
+      <created>1634846327603</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1634846327603</updated>
+    </task>
+    <task id="LOCAL-00015" summary="added missing dependencies">
+      <created>1634846464534</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1634846464534</updated>
+    </task>
+    <task id="LOCAL-00016" summary="increased code coverage, modified some class methods, and added more functions to UI">
+      <created>1634879135161</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1634879135161</updated>
+    </task>
+    <task id="LOCAL-00017" summary="added additional documentation">
+      <created>1635450245502</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1635450245502</updated>
+    </task>
+    <task id="LOCAL-00018" summary="fixed typos in documentation">
+      <created>1635463023412</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1635463023412</updated>
+    </task>
+    <task id="LOCAL-00019" summary="fixed more typos in documentation">
+      <created>1635527487546</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1635527487546</updated>
+    </task>
+    <task id="LOCAL-00020" summary="added more GUI elements">
+      <created>1636866283060</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1636866283060</updated>
+    </task>
+    <task id="LOCAL-00021" summary="functional flashcardGUI">
+      <created>1636937376903</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1636937376904</updated>
+    </task>
+    <task id="LOCAL-00022" summary="refactored a few methods in FlashcardUI">
+      <created>1636948626601</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1636948626601</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="added readme with initial description of the project and some user stories" />
+    <MESSAGE value="updated readmes, added stubs, began adding tests and implementation" />
+    <MESSAGE value="tests all current pass (missing some tests) and initial ui is working" />
+    <MESSAGE value="added and cleaned up some tests, improved ui" />
+    <MESSAGE value="updated proposal and user stories" />
+    <MESSAGE value="fixed file structure" />
+    <MESSAGE value="increased code coverage for FlashcardSetTest" />
+    <MESSAGE value="fixed bug in FlashcardApp" />
+    <MESSAGE value="Added to readme and cleaned up displayMenu" />
+    <MESSAGE value="added citation for FlashcardApp and fixed removeSet" />
+    <MESSAGE value="removed functionality from removeSet to reduce method length" />
+    <MESSAGE value="updated some basic methods in model, added matchSet() to FlashcardApp, updated user stories in README.md" />
+    <MESSAGE value="initial implementation of saving and loading flashcard libraries" />
+    <MESSAGE value="added more tests for JsonReaderTest and JsonWriterTest" />
+    <MESSAGE value="added missing dependencies" />
+    <MESSAGE value="increased code coverage, modified some class methods, and added more functions to UI" />
+    <MESSAGE value="added additional documentation" />
+    <MESSAGE value="fixed typos in documentation" />
+    <MESSAGE value="fixed more typos in documentation" />
+    <MESSAGE value="added more GUI elements" />
+    <MESSAGE value="functional flashcardGUI" />
+    <MESSAGE value="refactored a few methods in FlashcardUI" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactored a few methods in FlashcardUI" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="JUnit">
+        <watch expression="lib.library" language="JAVA" />
+      </configuration>
+    </watches-manager>
+  </component>
+</project>

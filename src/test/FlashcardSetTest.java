@@ -19,6 +19,7 @@ public class FlashcardSetTest {
         assertEquals(0, set.length());
         assertTrue(set.isEmpty());
         assertEquals(null, set.getCard("bob"));
+        assertEquals(null, set.getNextCard());
     }
 
     @Test
