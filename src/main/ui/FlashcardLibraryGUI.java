@@ -50,16 +50,20 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
 
         titlePane();
         buttons = flashcardSetDisplay();
-        scroll = new JScrollPane(
-                buttons, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scroll.setPreferredSize(new Dimension((int) (WIDTH * 0.56), HEIGHT));
-        desktop.add(scroll);
+        createScrollPane();
 
         desktop.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         desktop.setSize(WIDTH, HEIGHT + 85);
         desktop.setMinimumSize(new Dimension(WIDTH, HEIGHT + 85));
         desktop.setVisible(true);
 
+    }
+
+    private void createScrollPane() {
+        scroll = new JScrollPane(
+                buttons, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scroll.setPreferredSize(new Dimension((int) (WIDTH * 0.56), HEIGHT));
+        desktop.add(scroll);
     }
 
     // MODIFIES: this
@@ -217,18 +221,10 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
     }
 
     protected void refreshButtons() {
-//        desktop.remove(buttons);
-//        buttons = flashcardSetDisplay();
-//        desktop.add(buttons);
-//        desktop.revalidate();
-//        desktop.repaint();
         scroll.remove(buttons);
         buttons = flashcardSetDisplay();
-        scroll.add(buttons);
-        scroll.revalidate();
-        scroll.repaint();
-//        desktop.remove(scroll);
-//        desktop.add(scroll);
+        desktop.remove(scroll);
+        createScrollPane();
         desktop.revalidate();
         desktop.repaint();
     }

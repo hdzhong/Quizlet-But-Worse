@@ -158,6 +158,7 @@ public class FlashcardUI extends JFrame {
                 "Would you like to delete this set?");
         if (r == JOptionPane.YES_OPTION) {
             libraryGUI.lib.removeSet(set.getSetName());
+            libraryGUI.refreshButtons();
             cardUI.dispose();
         }
     }
