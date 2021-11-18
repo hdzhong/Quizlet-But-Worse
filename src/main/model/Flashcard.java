@@ -5,6 +5,7 @@ import persistence.Writable;
 
 // a flashcard that contains a front and back side,
 // as well as keeps track of the current side and the completion status
+
 public class Flashcard implements Writable {
     private String front;
     private String back;

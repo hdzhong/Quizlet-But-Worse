@@ -34,8 +34,10 @@ public class FlashcardSetTest {
         set.removeCard("0");
 
         assertEquals(9, set.length());
-        assertEquals("1",set.getNextCard().getFront());
+        assertEquals("1", set.getCurrent().getFront());
+        assertEquals("2",set.getNextCard().getFront());
         assertEquals(9, set.length());
+        assertEquals("1", set.getPrevCard().getFront());
     }
 
     @Test

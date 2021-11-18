@@ -54,15 +54,26 @@ public class FlashcardSet implements Writable {
         return null;
     }
 
+    public Flashcard getCurrent() {
+        current = flashcards.peekFirst();
+        return current;
+    }
+
     //MODIFIES: this
     //EFFECTS: pops and returns the first flashcard in the list then adds that card back to the end of the set.
     public Flashcard getNextCard() {
-        if (!flashcards.isEmpty()) {
-            current = flashcards.pop();
-            flashcards.offer(current);
-            return current;
-        }
-        return null;
+        current = flashcards.pollFirst();
+        flashcards.offer(current);
+        current = flashcards.peekFirst();
+        return current;
+    }
+
+    //MODIFIES: this
+    //EFFECTS: returns the last flashcard in the list then adds that card back to the front of the set.
+    public Flashcard getPrevCard() {
+        current = flashcards.pollLast();
+        flashcards.addFirst(current);
+        return current;
     }
 
     //MODIFIES: this

@@ -6,12 +6,9 @@ import model.Flashcard;
 import model.FlashcardLibrary;
 
 import java.awt.*;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -19,15 +16,15 @@ import model.FlashcardSet;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
-import java.util.ArrayList;
 import java.util.List;
 
+// Graphical interface for an interactive quizlet-like program.
 
 public class FlashcardLibraryGUI extends JFrame implements ActionListener {
     protected static int WIDTH;
     protected static int HEIGHT;
     public final Dimension screenSize;
-    private final JFrame desktop;
+    protected final JFrame desktop;
     private JPanel buttons;
     private JScrollPane scroll;
     protected FlashcardLibrary lib;
@@ -39,16 +36,15 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         FlatLaf.setup(new FlatArcDarkContrastIJTheme());
         lib = new FlashcardLibrary();
         desktop = new JFrame();
-//        GroupLayout layout = new GroupLayout(desktop);
-//        desktop.setLayout(layout);
-//        desktop.setLayout(new GridLayout(1, 2));
         desktop.setLayout(new FlowLayout());
         desktop.setTitle("Quizlet But Worse");
+        // Gets screen size to make sure app displays similarly across different screens
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         WIDTH = (int) (screenSize.width / 1.5);
         HEIGHT = (int) (screenSize.height / 1.5);
 
-        titlePane();
+        TitlePane titlePane = new TitlePane(this);
+        titlePane.titlePane();
         buttons = flashcardSetDisplay();
         createScrollPane();
 
@@ -59,6 +55,8 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
 
     }
 
+    //MODIFIES: this
+    //EFFECTS: creates ScrollPane that views into the display of all sets
     private void createScrollPane() {
         scroll = new JScrollPane(
                 buttons, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -66,46 +64,11 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         desktop.add(scroll);
     }
 
+
     // MODIFIES: this
-    // EFFECTS: creates a new JPanel that holds 4 menu buttons that can respond to clicks
-    private JPanel addMenuButtons() {
-        JPanel menuOptions = new JPanel();
-        List<JButton> menu = new ArrayList<>();
-        menuOptions.setLayout(new GridLayout(4, 2));
-
-        JButton jb1 = new JButton("Load Library");
-        JButton jb2 = new JButton("Save Library");
-        JButton jb3 = new JButton("Search Sets");
-        JButton jb4 = new JButton("Exit");
-
-        menuOptions.add(jb1);
-        menu.add(jb1);
-        menuOptions.add(jb2);
-        menu.add(jb2);
-        menuOptions.add(jb3);
-        menu.add(jb3);
-        menuOptions.add(jb4);
-        menu.add(jb4);
-
-        for (JButton button: menu) {
-            button.addActionListener(this);
-        }
-        return menuOptions;
-    }
-
-    private void titlePane() {
-        JPanel panel = new JPanel(new GridLayout(2, 1));
-        panel.add(addTitle());
-        panel.add(addMenuButtons());
-        panel.setPreferredSize(new Dimension((int) (WIDTH * 0.40), HEIGHT));
-        desktop.add(panel);
-    }
-
-
+    // EFFECTS: creates panel that displays all flashcard sets as a 3x3 grid
     protected JPanel flashcardSetDisplay() {
-//        GridLayout buttonLayout = new GridLayout(3,3);
-//        buttons = new JPanel(buttonLayout);
-        buttons = new JPanel(new FlowLayout());
+        buttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
         List<String> setList = lib.viewLibrary();
 
         // Adds button with set names
@@ -124,37 +87,22 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         addSetButton.addActionListener(this);
         setButtonSize(addSetButton);
         buttons.add(addSetButton);
-
-        // Add buttons to fill up slots to 7 buttons
-        for (int i = 0; i < 15 - setList.size(); i++) {
-            JButton button = new JButton();
-            buttons.add(button);
-            setButtonSize(button);
-        }
-        buttons.setPreferredSize(new Dimension((int) (WIDTH * 0.56), HEIGHT));
+        buttons.setPreferredSize(new Dimension((int) (WIDTH * 0.56), HEIGHT * 3));
         buttons.setVisible(true);
         return buttons;
     }
 
+    // MODIFIES: this
+    // EFFECTS: forces buttons representing flashcard sets to be a certain size
     private void setButtonSize(JButton button) {
         button.setMinimumSize(new Dimension((int) (WIDTH * 0.18), (int)(HEIGHT * 0.2)));
         button.setPreferredSize(new Dimension((int) (WIDTH * 0.18), (int)(HEIGHT * 0.2)));
         button.setMaximumSize(new Dimension((int) (WIDTH * 0.18), (int)(HEIGHT * 0.2)));
     }
 
-    private JLabel addTitle() {
-        BufferedImage logo = null;
-        try {
-            logo = ImageIO.read(new File("./img/quizlet.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        JLabel title = new JLabel(new ImageIcon(logo));
-        title.setHorizontalAlignment(JLabel.CENTER);
-        title.setVerticalTextPosition(JLabel.TOP);
-        return title;
-    }
 
+    // MODIFIES: this
+    // EFFECTS: opens up file select to allow user to choose library to load. Then loads selected data
     private void loadLibrary() {
         JFileChooser fc = new JFileChooser("./data");
         int res = fc.showOpenDialog(desktop);
@@ -170,6 +118,8 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: allows user to interact with buttons on FlashcardLibraryGUI
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton src = (JButton) e.getSource();
@@ -177,6 +127,9 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         selectMenuOptions(src);
     }
 
+    // MODIFIES: this
+    // EFFECTS: if Add Set is selected, prompt user to enter a set name and display new flashcard set.
+    // If an existing set is selected, display that set.
     private void selectSet(JButton src) {
         if (src.getText().equals("Add Set")) {
             String name = JOptionPane.showInputDialog(desktop, "Enter new set name:");
@@ -188,6 +141,8 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: selects one of four menu options
     private void selectMenuOptions(JButton src) {
         switch (src.getText()) {
             case "Load Library":
@@ -205,12 +160,16 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: adds set to the FlashcardLibrary and then displays new set of cards
     private void createCard(String name) {
         lib.addSet(new FlashcardSet(name));
         lib.getSet(name).addCard(new Flashcard("", ""));
         new FlashcardUI(this, lib.getSet(name));
     }
 
+    // MODIFIES: this
+    // EFFECTS: searches for set given set name. Returns set if found, otherwise returns error message
     private void searchSets() {
         String name = JOptionPane.showInputDialog(desktop, "Enter the set you are looking for: ");
         if (lib.getSet(name) != null) {
@@ -220,6 +179,8 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: refreshes the panel that displays the flashcard sets
     protected void refreshButtons() {
         scroll.remove(buttons);
         buttons = flashcardSetDisplay();
@@ -229,6 +190,8 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         desktop.repaint();
     }
 
+    // MODIFIES: this
+    // EFFECTS: allows user to save file with given name, storing all information as JSON
     private void saveLibrary() {
         String filename = JOptionPane.showInputDialog(desktop, "Please give your library a name");
         JSON_STORE = String.format("./data/%s.json", filename);

@@ -12,6 +12,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+// GUI for interactive flashcard that can flip sides. ALso includes multiple buttons that can navigate
+// the current flashcard set
 public class FlashcardUI extends JFrame {
     private final FlashcardLibraryGUI libraryGUI;
     private final FlashcardSet set;
@@ -25,7 +27,7 @@ public class FlashcardUI extends JFrame {
     public FlashcardUI(FlashcardLibraryGUI ui, FlashcardSet set) {
         this.libraryGUI = ui;
         this.set = set;
-        this.currentCard = set.getNextCard();
+        this.currentCard = set.getCurrent();
         FlatLaf.setup(new FlatArcDarkContrastIJTheme());
         cardUI = new JFrame();
         cardUI.setSize(FlashcardLibraryGUI.WIDTH, FlashcardLibraryGUI.HEIGHT);
@@ -43,19 +45,25 @@ public class FlashcardUI extends JFrame {
 
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates and adds menu buttons to control the flashcards
     private void addToolButtons() {
         JButton addCard = new JButton("Add Card");
         JButton deleteCard = new JButton("Delete Card");
         JButton editCard = new JButton("Edit Card");
+        JButton prevCard = new JButton("Previous Card");
         JButton nextCard = new JButton("Next Card");
         JButton markComplete = new JButton("Mark Completed");
-        JButton exitSet = new JButton("Exit");
+        JButton deleteSet = new JButton("Delete Set");
+        JButton exitSet = new JButton("Return to Menu");
 
         buttons.add(addCard);
         buttons.add(deleteCard);
         buttons.add(editCard);
+        buttons.add(prevCard);
         buttons.add(nextCard);
         buttons.add(markComplete);
+        buttons.add(deleteSet);
         buttons.add(exitSet);
 
         for (JButton button : buttons) {
@@ -67,7 +75,8 @@ public class FlashcardUI extends JFrame {
         cardUI.add(controls);
     }
 
-
+    // MODIFIES: this
+    // EFFECTS: creates JButton that contains the flashcard text. Can be a new card, the front, or the back.
     private JButton displayCard() {
         if (currentCard == null) {
             card = new JButton("");
@@ -83,6 +92,8 @@ public class FlashcardUI extends JFrame {
         return card;
     }
 
+    // MODIFIES: this
+    // EFFECTS: sets the various properties of the Card object
     private void cardProperties() {
         card.setFont(new Font("Calibri", Font.BOLD, cardUI.getWidth() / 35));
         card.setPreferredSize(new Dimension(
@@ -91,22 +102,32 @@ public class FlashcardUI extends JFrame {
         card.addActionListener(keyHandler);
     }
 
-
+    // MODIFIES: this
+    // EFFECTS: allows user to interact with UI elements in FlashcardUI
     private class ClickHandler implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             JButton src = (JButton) e.getSource();
-            toolbarOptions(src);
-            if (src.getText().equals("Front: " + currentCard.getFront())) {
-                currentCard.changeSide();
-                card.setText("Back: " + currentCard.getBack());
-            } else if (src.getText().equals("Back: " + currentCard.getBack())) {
-                currentCard.changeSide();
-                card.setText("Front: " + currentCard.getFront());
-            }
+            toolbarNavOptions(src);
+            toolbarOtherOptions(src);
+            flipSide(src);
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: flips the display text of the card (front --> back, back --> front)
+    private void flipSide(JButton src) {
+        if (src.getText().equals("Front: " + currentCard.getFront())) {
+            currentCard.changeSide();
+            card.setText("Back: " + currentCard.getBack());
+        } else if (src.getText().equals("Back: " + currentCard.getBack())) {
+            currentCard.changeSide();
+            card.setText("Front: " + currentCard.getFront());
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: refreshes all UI components in FlashcardUI
     private void refreshCard() {
         cardUI.remove(card);
         card = displayCard();
@@ -117,7 +138,9 @@ public class FlashcardUI extends JFrame {
         cardUI.repaint();
     }
 
-    private void toolbarOptions(JButton src) {
+    // MODIFIES: this
+    // EFFECTS: performs action based on which toolbar button is selected
+    private void toolbarNavOptions(JButton src) {
         switch (src.getText()) {
             case "Add Card":
                 addCard();
@@ -128,20 +151,43 @@ public class FlashcardUI extends JFrame {
             case "Edit Card":
                 editCard();
                 break;
+            case "Previous Card":
+                currentCard = set.getPrevCard();
+                refreshCard();
+                break;
             case "Next Card":
                 currentCard = set.getNextCard();
                 refreshCard();
                 break;
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: performs action based on which toolbar button is selected
+    private void toolbarOtherOptions(JButton src) {
+        switch (src.getText()) {
+            case "Delete Set":
+                removeSet();
+            case "Return to Menu":
+                returnMenu();
             case "Mark Completed":
                 currentCard.markCompleted();
                 refreshCard();
                 break;
-            case "Exit":
-                cardUI.dispose();
-                libraryGUI.refreshButtons();
         }
     }
 
+    // MODIFIES: this, libraryGUI
+    // EFFECTS: closes the flashcard and returns to libraryGUI.
+    // Also refreshes libraryGUI to reflect any changes
+    private void returnMenu() {
+        cardUI.dispose();
+        libraryGUI.refreshButtons();
+    }
+
+    // MODIFIES: this, libraryGUI
+    // EFFECTS: deletes current flashcard. If the set length is equal to 1, then prompts user if they wish
+    // to delete the set. If yes, exits the card menu and removes the set from libraryGUI and updates it
     private void deleteCard() {
         Flashcard temp = currentCard;
         if (set.length() == 1) {
@@ -152,6 +198,9 @@ public class FlashcardUI extends JFrame {
         refreshCard();
     }
 
+    // MODIFIES: this, libraryGUI
+    // EFFECTS: Prompts user if they wish to delete the set.
+    // If yes, exits the card menu and removes the set from libraryGUI and updates it
     private void removeSet() {
         int r = JOptionPane.showConfirmDialog(
                 cardUI,
@@ -163,6 +212,8 @@ public class FlashcardUI extends JFrame {
         }
     }
 
+    // MODIFIES: this, libraryGUI, lib
+    // EFFECTS: allows user to edit the front and back of the current flashcard
     private void editCard() {
         String front = JOptionPane.showInputDialog(
                 cardUI, "Enter the front of the card", currentCard.getFront());
@@ -175,6 +226,8 @@ public class FlashcardUI extends JFrame {
         }
     }
 
+    // MODIFIES: this, libraryGUI, lib
+    // EFFECTS: adds new flashcards to the given set
     private void addCard() {
         String front = JOptionPane.showInputDialog(cardUI, "Enter the front of the card");
         String back = JOptionPane.showInputDialog(cardUI, "Enter the back of the card");
