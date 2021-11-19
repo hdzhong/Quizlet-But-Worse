@@ -8,34 +8,33 @@ import model.FlashcardSet;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
 // GUI for interactive flashcard that can flip sides. ALso includes multiple buttons that can navigate
 // the current flashcard set
 
-public class FlashcardUI extends JFrame {
+public class FlashcardUI extends JDialog {
     private final FlashcardLibraryGUI libraryGUI;
     private final FlashcardSet set;
     private Flashcard currentCard;
-    private final JFrame cardUI;
+    private final JDialog cardUI;
     private JButton card;
     private final JPanel controls;
     private final List<JButton> buttons;
-    private final ClickHandler keyHandler;
+
+
 
     public FlashcardUI(FlashcardLibraryGUI ui, FlashcardSet set) {
         this.libraryGUI = ui;
         this.set = set;
         this.currentCard = set.getCurrent();
         FlatLaf.setup(new FlatArcDarkContrastIJTheme());
-        cardUI = new JFrame();
+        cardUI = new JDialog(libraryGUI, "Flashcard", true);
         cardUI.setSize(FlashcardLibraryGUI.WIDTH, FlashcardLibraryGUI.HEIGHT);
         cardUI.setResizable(false);
         cardUI.setLayout(new FlowLayout());
         controls = new JPanel(new FlowLayout());
-        keyHandler = new ClickHandler();
         buttons = new ArrayList<>();
 
         displayCard();
@@ -67,7 +66,7 @@ public class FlashcardUI extends JFrame {
         buttons.add(exitSet);
 
         for (JButton button : buttons) {
-            button.addActionListener(keyHandler);
+            button.addActionListener(new NavAction());
             button.setFont(libraryGUI.font.deriveFont(Font.PLAIN,18f));
             controls.add(button);
         }
@@ -99,20 +98,30 @@ public class FlashcardUI extends JFrame {
         card.setPreferredSize(new Dimension(
                 cardUI.getWidth() - 100, (int) (cardUI.getHeight() * 0.84)));
         card.setAlignmentX(Component.LEFT_ALIGNMENT);
-        card.addActionListener(keyHandler);
+        card.addActionListener(new FlipAction());
     }
 
     // MODIFIES: this
     // EFFECTS: allows user to interact with UI elements in FlashcardUI
-    private class ClickHandler implements ActionListener {
+    private class NavAction extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
             JButton src = (JButton) e.getSource();
-            toolbarNavOptions(src);
-            toolbarOtherOptions(src);
+            toolbarOptions(src);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: allows user to interact with UI elements in FlashcardUI
+    private class FlipAction extends AbstractAction {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JButton src = (JButton) e.getSource();
             flipSide(src);
         }
     }
+
+
 
     // MODIFIES: this
     // EFFECTS: flips the display text of the card (front --> back, back --> front)
@@ -140,7 +149,8 @@ public class FlashcardUI extends JFrame {
 
     // MODIFIES: this
     // EFFECTS: performs action based on which toolbar button is selected
-    private void toolbarNavOptions(JButton src) {
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
+    private void toolbarOptions(JButton src) {
         switch (src.getText()) {
             case "Add Card":
                 addCard();
@@ -159,13 +169,6 @@ public class FlashcardUI extends JFrame {
                 currentCard = set.getNextCard();
                 refreshCard();
                 break;
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: performs action based on which toolbar button is selected
-    private void toolbarOtherOptions(JButton src) {
-        switch (src.getText()) {
             case "Delete Set":
                 removeSet();
             case "Return to Menu":
