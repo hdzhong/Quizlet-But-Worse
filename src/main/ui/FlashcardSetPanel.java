@@ -21,7 +21,7 @@ public class FlashcardSetPanel extends JPanel implements Serializable {
     void createScrollPane() {
         scroll = new JScrollPane(
                 buttons, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scroll.setPreferredSize(new Dimension((int) (FlashcardLibraryGUI.WIDTH * 0.56), FlashcardLibraryGUI.HEIGHT));
+        scroll.setPreferredSize(new Dimension((int) (FlashcardLibraryGUI.WIDTH * 0.70), FlashcardLibraryGUI.HEIGHT));
         flashcardLibraryGUI.desktop.add(scroll);
     }
 
@@ -38,6 +38,7 @@ public class FlashcardSetPanel extends JPanel implements Serializable {
                 button.setBackground(new Color(34, 254, 148, 46));
             }
             buttons.add(button);
+            button.setFont(flashcardLibraryGUI.font.deriveFont(Font.PLAIN,18f));
             setButtonSize(button);
             button.addActionListener(flashcardLibraryGUI);
         }
@@ -45,6 +46,7 @@ public class FlashcardSetPanel extends JPanel implements Serializable {
         // Adds 9th button to for an Add Set button
         JButton addSetButton = new JButton("Add Set");
         addSetButton.addActionListener(flashcardLibraryGUI);
+        addSetButton.setFont(flashcardLibraryGUI.font.deriveFont(Font.PLAIN,15f));
         setButtonSize(addSetButton);
         buttons.add(addSetButton);
         buttons.setPreferredSize(
@@ -65,7 +67,7 @@ public class FlashcardSetPanel extends JPanel implements Serializable {
     // EFFECTS: establishes dimensions for the cards
     private Dimension cardSize() {
         return new Dimension(
-                (int) (FlashcardLibraryGUI.WIDTH * 0.18), (int) (FlashcardLibraryGUI.HEIGHT * 0.2));
+                (int) (FlashcardLibraryGUI.WIDTH * 0.13), (int) (FlashcardLibraryGUI.HEIGHT * 0.2));
     }
 
     // MODIFIES: this

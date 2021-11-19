@@ -68,10 +68,10 @@ public class FlashcardUI extends JFrame {
 
         for (JButton button : buttons) {
             button.addActionListener(keyHandler);
+            button.setFont(libraryGUI.font.deriveFont(Font.PLAIN,18f));
             controls.add(button);
         }
-        controls.setPreferredSize(new Dimension(cardUI.getWidth(), (int) (cardUI.getHeight() * 0.2)));
-        controls.setMinimumSize(new Dimension(cardUI.getWidth(), nextCard.getHeight()));
+        controls.setMinimumSize(new Dimension(cardUI.getWidth(), (int) (cardUI.getHeight() * 0.2)));
         cardUI.add(controls);
     }
 
@@ -95,7 +95,7 @@ public class FlashcardUI extends JFrame {
     // MODIFIES: this
     // EFFECTS: sets the various properties of the Card object
     private void cardProperties() {
-        card.setFont(new Font("Calibri", Font.BOLD, cardUI.getWidth() / 35));
+        card.setFont(libraryGUI.font.deriveFont(Font.BOLD,50f));
         card.setPreferredSize(new Dimension(
                 cardUI.getWidth() - 100, (int) (cardUI.getHeight() * 0.84)));
         card.setAlignmentX(Component.LEFT_ALIGNMENT);

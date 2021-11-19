@@ -48,17 +48,28 @@ public class TitlePanel extends JPanel implements Serializable {
         menu.add(jb4);
 
         for (JButton jb : menu) {
+            setButtonSize(jb);
+            jb.setFont(flashcardLibraryGUI.font.deriveFont(Font.BOLD,30f));
+            jb.setHorizontalAlignment(SwingConstants.LEFT);
             menuOptions.add(jb);
         }
+    }
+
+    private void setButtonSize(JButton jb) {
+        Dimension buttonSize = new Dimension(
+                (int) (FlashcardLibraryGUI.WIDTH * 0.275), (int) (FlashcardLibraryGUI.HEIGHT * 0.155));
+        jb.setMinimumSize(buttonSize);
+        jb.setPreferredSize(buttonSize);
+        jb.setMaximumSize(buttonSize);
     }
 
     // MODIFIES: this
     // EFFECTS: groups together the logo and the menu buttons into one pane
     void titlePane() {
-        JPanel panel = new JPanel(new GridLayout(2, 1));
+        JPanel panel = new JPanel(new FlowLayout());
         panel.add(addTitle());
         panel.add(addMenuButtons());
-        panel.setPreferredSize(new Dimension((int) (FlashcardLibraryGUI.WIDTH * 0.40), FlashcardLibraryGUI.HEIGHT));
+        panel.setPreferredSize(new Dimension((int) (FlashcardLibraryGUI.WIDTH * 0.275), FlashcardLibraryGUI.HEIGHT));
         flashcardLibraryGUI.desktop.add(panel);
     }
 

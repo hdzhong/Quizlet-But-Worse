@@ -9,6 +9,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -19,37 +20,34 @@ import persistence.JsonWriter;
 // Graphical interface for an interactive quizlet-like program.
 
 public class FlashcardLibraryGUI extends JFrame implements ActionListener {
-    protected static int WIDTH;
-    protected static int HEIGHT;
-    public final Dimension screenSize;
+    protected static int WIDTH = 1280;
+    protected static int HEIGHT = 720;
     protected final JFrame desktop;
     private final FlashcardSetPanel flashcardSetPanel = new FlashcardSetPanel(this);
     protected FlashcardLibrary lib;
     private JsonReader jsonReader;
     private static String JSON_STORE;
+    protected Font font;
 
 
     public FlashcardLibraryGUI() {
         FlatLaf.setup(new FlatArcDarkContrastIJTheme());
+        UIManager.put("Button.arc", 10);
         lib = new FlashcardLibrary();
         desktop = new JFrame();
         desktop.setLayout(new FlowLayout());
         desktop.setTitle("Quizlet But Worse");
-
-        // Gets screen size to make sure app displays similarly across different screens
-        screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        WIDTH = (int) (screenSize.width / 1.5);
-        HEIGHT = (int) (screenSize.height / 1.5);
-
+        initFont();
         TitlePanel titlePane = new TitlePanel(this);
         titlePane.titlePane();
         flashcardSetPanel.buttons = flashcardSetPanel.flashcardSetDisplay();
         flashcardSetPanel.createScrollPane();
 
         desktop.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        desktop.setSize(WIDTH, (int) (HEIGHT * 1.1));
-        desktop.setMinimumSize(new Dimension(WIDTH, (int) (HEIGHT * 1.1)));
+        desktop.setSize(WIDTH, HEIGHT);
+        desktop.setMinimumSize(new Dimension(WIDTH, HEIGHT));
         desktop.setVisible(true);
+
     }
 
     // MODIFIES: this
@@ -117,6 +115,18 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         lib.addSet(new FlashcardSet(name));
         lib.getSet(name).addCard(new Flashcard("", ""));
         new FlashcardUI(this, lib.getSet(name));
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads and initializes the custom font
+    private void initFont() {
+        try {
+            font = Font.createFont(Font.TRUETYPE_FONT, new File("./fonts/RobotoSlab-Light.ttf"));
+        } catch (FontFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // MODIFIES: this
