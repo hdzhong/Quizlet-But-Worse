@@ -10,12 +10,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-// Creates title pane that contains the logo and menu buttons
+// Creates title panel that contains the logo and menu buttons
 
-public class TitlePane implements Serializable {
+public class TitlePanel extends JPanel implements Serializable {
     private final FlashcardLibraryGUI flashcardLibraryGUI;
 
-    public TitlePane(FlashcardLibraryGUI flashcardLibraryGUI) {
+    public TitlePanel(FlashcardLibraryGUI flashcardLibraryGUI) {
         this.flashcardLibraryGUI = flashcardLibraryGUI;
     }
 

@@ -16,8 +16,6 @@ import model.FlashcardSet;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
-import java.util.List;
-
 // Graphical interface for an interactive quizlet-like program.
 
 public class FlashcardLibraryGUI extends JFrame implements ActionListener {
@@ -25,8 +23,7 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
     protected static int HEIGHT;
     public final Dimension screenSize;
     protected final JFrame desktop;
-    private JPanel buttons;
-    private JScrollPane scroll;
+    private final FlashcardSetPanel flashcardSetPanel = new FlashcardSetPanel(this);
     protected FlashcardLibrary lib;
     private JsonReader jsonReader;
     private static String JSON_STORE;
@@ -38,68 +35,22 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         desktop = new JFrame();
         desktop.setLayout(new FlowLayout());
         desktop.setTitle("Quizlet But Worse");
+
         // Gets screen size to make sure app displays similarly across different screens
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         WIDTH = (int) (screenSize.width / 1.5);
         HEIGHT = (int) (screenSize.height / 1.5);
 
-        TitlePane titlePane = new TitlePane(this);
+        TitlePanel titlePane = new TitlePanel(this);
         titlePane.titlePane();
-        buttons = flashcardSetDisplay();
-        createScrollPane();
+        flashcardSetPanel.buttons = flashcardSetPanel.flashcardSetDisplay();
+        flashcardSetPanel.createScrollPane();
 
         desktop.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        desktop.setSize(WIDTH, HEIGHT + 85);
-        desktop.setMinimumSize(new Dimension(WIDTH, HEIGHT + 85));
+        desktop.setSize(WIDTH, (int) (HEIGHT * 1.1));
+        desktop.setMinimumSize(new Dimension(WIDTH, (int) (HEIGHT * 1.1)));
         desktop.setVisible(true);
-
     }
-
-    //MODIFIES: this
-    //EFFECTS: creates ScrollPane that views into the display of all sets
-    private void createScrollPane() {
-        scroll = new JScrollPane(
-                buttons, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scroll.setPreferredSize(new Dimension((int) (WIDTH * 0.56), HEIGHT));
-        desktop.add(scroll);
-    }
-
-
-    // MODIFIES: this
-    // EFFECTS: creates panel that displays all flashcard sets as a 3x3 grid
-    protected JPanel flashcardSetDisplay() {
-        buttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        List<String> setList = lib.viewLibrary();
-
-        // Adds button with set names
-        for (String set : setList) {
-            JButton button = new JButton(set);
-            if (lib.getSet(set).markCompleted()) {
-                button.setBackground(new Color(34, 254, 148, 46));
-            }
-            buttons.add(button);
-            setButtonSize(button);
-            button.addActionListener(this);
-        }
-
-        // Adds 9th button to for an Add Set button
-        JButton addSetButton = new JButton("Add Set");
-        addSetButton.addActionListener(this);
-        setButtonSize(addSetButton);
-        buttons.add(addSetButton);
-        buttons.setPreferredSize(new Dimension((int) (WIDTH * 0.56), HEIGHT * 3));
-        buttons.setVisible(true);
-        return buttons;
-    }
-
-    // MODIFIES: this
-    // EFFECTS: forces buttons representing flashcard sets to be a certain size
-    private void setButtonSize(JButton button) {
-        button.setMinimumSize(new Dimension((int) (WIDTH * 0.18), (int)(HEIGHT * 0.2)));
-        button.setPreferredSize(new Dimension((int) (WIDTH * 0.18), (int)(HEIGHT * 0.2)));
-        button.setMaximumSize(new Dimension((int) (WIDTH * 0.18), (int)(HEIGHT * 0.2)));
-    }
-
 
     // MODIFIES: this
     // EFFECTS: opens up file select to allow user to choose library to load. Then loads selected data
@@ -147,7 +98,7 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         switch (src.getText()) {
             case "Load Library":
                 loadLibrary();
-                refreshButtons();
+                flashcardSetPanel.refreshButtons();
                 break;
             case "Save Library":
                 saveLibrary();
@@ -182,12 +133,7 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
     // MODIFIES: this
     // EFFECTS: refreshes the panel that displays the flashcard sets
     protected void refreshButtons() {
-        scroll.remove(buttons);
-        buttons = flashcardSetDisplay();
-        desktop.remove(scroll);
-        createScrollPane();
-        desktop.revalidate();
-        desktop.repaint();
+        flashcardSetPanel.refreshButtons();
     }
 
     // MODIFIES: this

@@ -14,6 +14,7 @@ import java.util.List;
 
 // GUI for interactive flashcard that can flip sides. ALso includes multiple buttons that can navigate
 // the current flashcard set
+
 public class FlashcardUI extends JFrame {
     private final FlashcardLibraryGUI libraryGUI;
     private final FlashcardSet set;
@@ -40,7 +41,6 @@ public class FlashcardUI extends JFrame {
         displayCard();
         cardUI.add(card);
         addToolButtons();
-
         cardUI.setVisible(true);
 
     }
