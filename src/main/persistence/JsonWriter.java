@@ -1,5 +1,7 @@
 package persistence;
 
+import model.Event;
+import model.EventLog;
 import model.FlashcardLibrary;
 import org.json.JSONObject;
 
@@ -37,6 +39,8 @@ public class JsonWriter {
     // MODIFIES: this
     // EFFECTS: closes writer
     public void close() {
+        EventLog.getInstance().logEvent(
+                new Event("Library has been saved"));
         writer.close();
     }
 

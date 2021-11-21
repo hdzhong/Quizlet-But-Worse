@@ -80,19 +80,20 @@ public class FlashcardSet implements Writable {
     //EFFECTS: adds new card to FlashcardSet
     public void addCard(Flashcard card) {
         flashcards.add(card);
+        EventLog.getInstance().logEvent(new Event(String.format("Added %s to %s", card.getFront(), setName)));
     }
 
     //MODIFIES: this
     //EFFECTS: if a card with given name exists, remove it from the set and return true.
     //otherwise return false
     public boolean removeCard(String name) {
-        List<Flashcard> remove = new ArrayList<>();
-        for (Flashcard c : flashcards) {
-            if (c.getFront().equals(name)) {
-                remove.add(c);
-            }
+        if (flashcards.contains(this.getCard(name))) {
+            EventLog.getInstance().logEvent(
+                    new Event(String.format("Added %s to %s", this.getCard(name).getFront(), setName)));
+            flashcards.remove(this.getCard(name));
+            return true;
         }
-        return flashcards.removeAll(remove);
+        return false;
     }
 
 
@@ -105,6 +106,9 @@ public class FlashcardSet implements Writable {
                 return false;
             } else {
                 this.completed = true;
+                EventLog.getInstance().logEvent(
+                        new Event(String.format("%s is completed", setName)));
+
             }
         }
         return true;

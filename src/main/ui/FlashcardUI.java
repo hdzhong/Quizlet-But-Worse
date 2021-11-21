@@ -122,7 +122,6 @@ public class FlashcardUI extends JDialog {
     }
 
 
-
     // MODIFIES: this
     // EFFECTS: flips the display text of the card (front --> back, back --> front)
     private void flipSide(JButton src) {
@@ -141,6 +140,8 @@ public class FlashcardUI extends JDialog {
         cardUI.remove(card);
         card = displayCard();
         cardUI.add(card);
+        card.revalidate();
+        card.repaint();
         cardUI.remove(controls);
         cardUI.add(controls);
         cardUI.revalidate();
@@ -162,22 +163,36 @@ public class FlashcardUI extends JDialog {
                 editCard();
                 break;
             case "Previous Card":
-                currentCard = set.getPrevCard();
-                refreshCard();
+                previousCard();
                 break;
             case "Next Card":
-                currentCard = set.getNextCard();
-                refreshCard();
+                nextCard();
                 break;
             case "Delete Set":
                 removeSet();
+                break;
+            case "Mark Completed":
+                markCard();
+                break;
             case "Return to Menu":
                 returnMenu();
-            case "Mark Completed":
-                currentCard.markCompleted();
-                refreshCard();
                 break;
         }
+    }
+
+    private void markCard() {
+        currentCard.markCompleted();
+        refreshCard();
+    }
+
+    private void nextCard() {
+        currentCard = set.getNextCard();
+        refreshCard();
+    }
+
+    private void previousCard() {
+        currentCard = set.getPrevCard();
+        refreshCard();
     }
 
     // MODIFIES: this, libraryGUI

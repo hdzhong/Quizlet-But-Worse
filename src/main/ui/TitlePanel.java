@@ -1,5 +1,7 @@
 package ui;
 
+import model.Flashcard;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -14,24 +16,34 @@ import java.util.List;
 
 public class TitlePanel extends JPanel implements Serializable {
     private final FlashcardLibraryGUI flashcardLibraryGUI;
+    private JPanel menuOptions = new JPanel();
+    private JPanel menuSidebar = new JPanel(new FlowLayout());
+
+
 
     public TitlePanel(FlashcardLibraryGUI flashcardLibraryGUI) {
         this.flashcardLibraryGUI = flashcardLibraryGUI;
+        addMenuButtons(menuOptions);
+        addTitle(menuSidebar);
+        menuSidebar.add(menuOptions);
+        menuSidebar.setPreferredSize(
+                new Dimension((int) (FlashcardLibraryGUI.WIDTH * 0.275), FlashcardLibraryGUI.HEIGHT));
+        menuSidebar.setVisible(true);
+        flashcardLibraryGUI.desktop.add(menuSidebar);
     }
+
 
     // MODIFIES: this
     // EFFECTS: creates a new JPanel that holds 4 menu buttons that can respond to clicks
-    private JPanel addMenuButtons() {
-        JPanel menuOptions = new JPanel();
+    private void addMenuButtons(JPanel panel) {
         List<JButton> menu = new ArrayList<>();
-        menuOptions.setLayout(new GridLayout(4, 2));
+        panel.setLayout(new GridLayout(4, 2));
 
-        createMenuButtons(menuOptions, menu);
+        createMenuButtons(panel, menu);
 
         for (JButton button : menu) {
-            button.addActionListener(flashcardLibraryGUI);
+            button.addActionListener(flashcardLibraryGUI.selectMenu);
         }
-        return menuOptions;
     }
 
     // MODIFIES: this
@@ -64,18 +76,8 @@ public class TitlePanel extends JPanel implements Serializable {
     }
 
     // MODIFIES: this
-    // EFFECTS: groups together the logo and the menu buttons into one pane
-    void titlePane() {
-        JPanel panel = new JPanel(new FlowLayout());
-        panel.add(addTitle());
-        panel.add(addMenuButtons());
-        panel.setPreferredSize(new Dimension((int) (FlashcardLibraryGUI.WIDTH * 0.275), FlashcardLibraryGUI.HEIGHT));
-        flashcardLibraryGUI.desktop.add(panel);
-    }
-
-    // MODIFIES: this
     // EFFECTS: reads logo image and creates logo as JLabel
-    private JLabel addTitle() {
+    private void addTitle(JPanel panel) {
         BufferedImage logo = null;
         try {
             logo = ImageIO.read(new File("./img/quizlet.png"));
@@ -85,7 +87,7 @@ public class TitlePanel extends JPanel implements Serializable {
         JLabel title = new JLabel(new ImageIcon(logo));
         title.setHorizontalAlignment(JLabel.CENTER);
         title.setVerticalTextPosition(JLabel.TOP);
-        return title;
+        panel.add(title);
     }
 
 }

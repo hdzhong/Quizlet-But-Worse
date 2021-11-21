@@ -1,30 +1,31 @@
 package ui;
 
-import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatArcDarkContrastIJTheme;
-import model.Flashcard;
-import model.FlashcardLibrary;
+import model.Event;
+import model.*;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
-import java.awt.*;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import model.FlashcardSet;
-import persistence.JsonReader;
-import persistence.JsonWriter;
-
 // Graphical interface for an interactive quizlet-like program.
 
-public class FlashcardLibraryGUI extends JFrame implements ActionListener {
+public class FlashcardLibraryGUI extends JFrame {
     protected static int WIDTH = 1280;
-    protected static int HEIGHT = 720;
+    protected static int HEIGHT = 760;
     protected final JFrame desktop;
-    private final FlashcardSetPanel flashcardSetPanel = new FlashcardSetPanel(this);
+    private JPanel title;
+    private final FlashcardSetPanel sets;
     protected FlashcardLibrary lib;
+    protected SelectMenu selectMenu = new SelectMenu();
+    protected SelectSet selectSet = new SelectSet();
     private JsonReader jsonReader;
     private static String JSON_STORE;
     protected Font font;
@@ -38,10 +39,9 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         desktop.setLayout(new FlowLayout());
         desktop.setTitle("Quizlet But Worse");
         initFont();
-        TitlePanel titlePane = new TitlePanel(this);
-        titlePane.titlePane();
-        flashcardSetPanel.buttons = flashcardSetPanel.flashcardSetDisplay();
-        flashcardSetPanel.createScrollPane();
+
+        title = new TitlePanel(this);
+        sets = new FlashcardSetPanel(this);
 
         desktop.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         desktop.setSize(WIDTH, HEIGHT);
@@ -69,11 +69,23 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
 
     // MODIFIES: this
     // EFFECTS: allows user to interact with buttons on FlashcardLibraryGUI
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        JButton src = (JButton) e.getSource();
-        selectSet(src);
-        selectMenuOptions(src);
+    private class SelectSet implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JButton src = (JButton) e.getSource();
+            selectSet(src);
+        }
+    }
+
+
+    // MODIFIES: this
+    // EFFECTS: allows user to interact with buttons on FlashcardLibraryGUI
+    private class SelectMenu implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JButton src = (JButton) e.getSource();
+            selectMenuOptions(src);
+        }
     }
 
     // MODIFIES: this
@@ -96,7 +108,7 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
         switch (src.getText()) {
             case "Load Library":
                 loadLibrary();
-                flashcardSetPanel.refreshButtons();
+                sets.refreshButtons();
                 break;
             case "Save Library":
                 saveLibrary();
@@ -105,6 +117,9 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
                 searchSets();
                 break;
             case "Exit":
+                EventLog.getInstance().logEvent(
+                        new Event("Exited application"));
+                printLog(EventLog.getInstance());
                 System.exit(0);
         }
     }
@@ -143,22 +158,30 @@ public class FlashcardLibraryGUI extends JFrame implements ActionListener {
     // MODIFIES: this
     // EFFECTS: refreshes the panel that displays the flashcard sets
     protected void refreshButtons() {
-        flashcardSetPanel.refreshButtons();
+        sets.refreshButtons();
     }
 
     // MODIFIES: this
     // EFFECTS: allows user to save file with given name, storing all information as JSON
     private void saveLibrary() {
         String filename = JOptionPane.showInputDialog(desktop, "Please give your library a name");
-        JSON_STORE = String.format("./data/%s.json", filename);
-        JsonWriter jsonWriter = new JsonWriter(JSON_STORE);
-        try {
-            jsonWriter.open();
-            jsonWriter.write(lib);
-            jsonWriter.close();
-            JOptionPane.showMessageDialog(desktop, "Saved to " + JSON_STORE);
-        } catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(desktop, "Unable to write to file: " + JSON_STORE);
+        if (filename != null) {
+            JSON_STORE = String.format("./data/%s.json", filename);
+            JsonWriter jsonWriter = new JsonWriter(JSON_STORE);
+            try {
+                jsonWriter.open();
+                jsonWriter.write(lib);
+                jsonWriter.close();
+                JOptionPane.showMessageDialog(desktop, "Saved to " + JSON_STORE);
+            } catch (FileNotFoundException e) {
+                JOptionPane.showMessageDialog(desktop, "Unable to write to file: " + JSON_STORE);
+            }
+        }
+    }
+
+    public void printLog(EventLog el) {
+        for (Event next : el) {
+            System.out.println(next.toString() + "\n\n");
         }
     }
 }

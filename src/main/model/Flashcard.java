@@ -40,11 +40,16 @@ public class Flashcard implements Writable {
     }
 
     //MODIFIES: this
-    //EFFECTS: if completed is false, set it to true. If completed is already true, return false
+    //EFFECTS: if completed is false, set it to true. Regardless return true.
     public boolean markCompleted() {
         if (!completed) {
             completed = true;
+            EventLog.getInstance().logEvent(
+                    new Event(String.format("%s is now complete!", this.getFront())));
+            return true;
         }
+        EventLog.getInstance().logEvent(
+                new Event(String.format("%s is already completed", this.getFront())));
         return true;
     }
 
@@ -62,6 +67,8 @@ public class Flashcard implements Writable {
     //EFFECTS: changes the side (true = front, false = back)
     public void changeSide() {
         side = (!side);
+        EventLog.getInstance().logEvent(
+                new Event("Card has been flipped"));
     }
 
     //getter

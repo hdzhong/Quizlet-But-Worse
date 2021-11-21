@@ -35,7 +35,7 @@ be a very useful tool to create and tailor to my own needs.
 ### Phase 2
 - As a user, I want to be able to save my flashcard sets and individual cards
 - As a user, when I open the app, I want the option to be able to load my previous sets
-- As a user, I want to be able to play a game where I try to correctly match the front of the card with the definition
+- ~~As a user, I want to be able to play a game where I try to correctly match the front of the card with the definition~~
 
 ### Phase 3
 - As a user, I want to be able to add multiple flashcards to a flashcard set in a GUI

@@ -1,8 +1,6 @@
 package persistence;
 
-import model.Flashcard;
-import model.FlashcardLibrary;
-import model.FlashcardSet;
+import model.*;
 
 
 import java.io.IOException;
@@ -30,6 +28,8 @@ public class JsonReader {
     public FlashcardLibrary read() throws IOException {
         String jsonData = readFile(source);
         JSONObject jsonObject = new JSONObject(jsonData);
+        EventLog.getInstance().logEvent(
+                new Event("Loaded saved library"));
         return parseFlashcardLibrary(jsonObject);
     }
 

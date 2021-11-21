@@ -11,9 +11,12 @@ public class FlashcardSetPanel extends JPanel implements Serializable {
     private final FlashcardLibraryGUI flashcardLibraryGUI;
     JPanel buttons;
     JScrollPane scroll;
+    List<String> setList;
 
     public FlashcardSetPanel(FlashcardLibraryGUI flashcardLibraryGUI) {
         this.flashcardLibraryGUI = flashcardLibraryGUI;
+        flashcardSetDisplay();
+        createScrollPane();
     }
 
     //MODIFIES: this
@@ -29,7 +32,7 @@ public class FlashcardSetPanel extends JPanel implements Serializable {
     // EFFECTS: creates panel that displays all flashcard sets as a 3x3 grid
     protected JPanel flashcardSetDisplay() {
         buttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        List<String> setList = flashcardLibraryGUI.lib.viewLibrary();
+        setList = flashcardLibraryGUI.lib.viewLibrary();
 
         // Adds button with set names
         for (String set : setList) {
@@ -40,12 +43,12 @@ public class FlashcardSetPanel extends JPanel implements Serializable {
             buttons.add(button);
             button.setFont(flashcardLibraryGUI.font.deriveFont(Font.PLAIN,18f));
             setButtonSize(button);
-            button.addActionListener(flashcardLibraryGUI);
+            button.addActionListener(flashcardLibraryGUI.selectSet);
         }
 
         // Adds 9th button to for an Add Set button
         JButton addSetButton = new JButton("Add Set");
-        addSetButton.addActionListener(flashcardLibraryGUI);
+        addSetButton.addActionListener(flashcardLibraryGUI.selectSet);
         addSetButton.setFont(flashcardLibraryGUI.font.deriveFont(Font.PLAIN,15f));
         setButtonSize(addSetButton);
         buttons.add(addSetButton);
