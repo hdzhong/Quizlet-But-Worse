@@ -11,6 +11,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -43,12 +45,20 @@ public class FlashcardLibraryGUI extends JFrame {
         title = new TitlePanel(this);
         sets = new FlashcardSetPanel(this);
 
-        desktop.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        desktop.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         desktop.setSize(WIDTH, HEIGHT);
         desktop.setMinimumSize(new Dimension(WIDTH, HEIGHT));
         desktop.setVisible(true);
 
+        desktop.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                printLog(EventLog.getInstance());
+                e.getWindow().dispose();
+            }
+        });
     }
+
 
     // MODIFIES: this
     // EFFECTS: opens up file select to allow user to choose library to load. Then loads selected data
@@ -128,8 +138,9 @@ public class FlashcardLibraryGUI extends JFrame {
     // EFFECTS: adds set to the FlashcardLibrary and then displays new set of cards
     private void createCard(String name) {
         lib.addSet(new FlashcardSet(name));
-        lib.getSet(name).addCard(new Flashcard("", ""));
-        new FlashcardUI(this, lib.getSet(name));
+        FlashcardSet newSet = lib.getSet(name);
+        newSet.addCard(new Flashcard("Empty Card", "Please Edit"));
+        new FlashcardUI(this, newSet);
     }
 
     // MODIFIES: this
@@ -181,7 +192,7 @@ public class FlashcardLibraryGUI extends JFrame {
 
     public void printLog(EventLog el) {
         for (Event next : el) {
-            System.out.println(next.toString() + "\n\n");
+            System.out.println(next.toString() + "\n");
         }
     }
 }

@@ -42,3 +42,40 @@ be a very useful tool to create and tailor to my own needs.
 - As a user, I want to be able to add multiple flashcard sets to the library in a GUI
 - As a user, I want to be able to visually see all my sets and flashcards
 - As a user, I want to be able to load and save the state of the application
+
+### Phase 4: Task 2
+**Sample log:**
+
+Sun Nov 21 16:31:09 PST 2021
+Added Log Test to library
+
+Sun Nov 21 16:31:09 PST 2021
+Added Empty Card to Log Test
+
+Sun Nov 21 16:31:16 PST 2021
+Empty Card has been edited to Card1 front
+
+Sun Nov 21 16:31:16 PST 2021
+Please Edit has been edited to Card1 back
+
+Sun Nov 21 16:31:22 PST 2021
+Added Card2 front to Log Test
+
+Sun Nov 21 16:31:29 PST 2021
+Added Card3 front to Log Test
+
+Sun Nov 21 16:31:33 PST 2021
+Card has been flipped
+
+Sun Nov 21 16:31:34 PST 2021
+Card3 front is now complete!
+
+Sun Nov 21 16:31:36 PST 2021
+Removed Card3 front from Log Test
+
+Sun Nov 21 16:31:39 PST 2021
+Removed Log Test from library
+
+Sun Nov 21 16:31:40 PST 2021
+Exited application
+

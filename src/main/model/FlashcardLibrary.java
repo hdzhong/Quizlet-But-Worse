@@ -44,11 +44,25 @@ public class FlashcardLibrary implements Writable {
     //otherwise return false
     public boolean removeSet(String set) {
         if (library.contains(this.getSet(set))) {
-            EventLog.getInstance().logEvent(new Event("Removed " + this.getSet(set) + " to library"));
+            EventLog.getInstance().logEvent(new Event(
+                    "Removed " + this.getSet(set).getSetName() + " from library"));
             library.remove(this.getSet(set));
             return true;
         }
         EventLog.getInstance().logEvent(new Event("Could not find " + set + " in library"));
+        return false;
+    }
+
+    //MODIFIES: this
+    //EFFECTS: if the given set exists, remove it from the library.
+    //otherwise return false
+    public boolean removeSet(FlashcardSet set) {
+        if (library.contains(set)) {
+            EventLog.getInstance().logEvent(new Event("Removed " + set.getSetName() + " from library"));
+            library.remove(set);
+            return true;
+        }
+        EventLog.getInstance().logEvent(new Event("Could not find " + set.getSetName() + " in library"));
         return false;
     }
 
@@ -77,7 +91,6 @@ public class FlashcardLibrary implements Writable {
     public FlashcardSet getSet(String set) {
         for (FlashcardSet s : library) {
             if (s.getSetName().equals(set)) {
-                EventLog.getInstance().logEvent(new Event(String.format("Found %s in library", set)));
                 return s;
             }
         }

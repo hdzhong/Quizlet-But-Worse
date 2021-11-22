@@ -44,6 +44,14 @@ public class FlashcardSet implements Writable {
         return setName;
     }
 
+//    public List<String> getListSets() {
+//        List<String> setList = new ArrayList<>();
+//        for (Flashcard c: flashcards) {
+//            setList.add(c.getFront());
+//        }
+//        return setList;
+//    }
+
     //EFFECTS: if the flashcard with name card exists, return card. Otherwise return null
     public Flashcard getCard(String card) {
         for (Flashcard c : flashcards) {
@@ -62,24 +70,27 @@ public class FlashcardSet implements Writable {
     //MODIFIES: this
     //EFFECTS: pops and returns the first flashcard in the list then adds that card back to the end of the set.
     public Flashcard getNextCard() {
-        current = flashcards.pollFirst();
-        flashcards.offer(current);
-        current = flashcards.peekFirst();
+        current = flashcards.pollLast();
+        flashcards.addFirst(current);
+//        System.out.println(getListSets());
         return current;
     }
 
     //MODIFIES: this
     //EFFECTS: returns the last flashcard in the list then adds that card back to the front of the set.
     public Flashcard getPrevCard() {
-        current = flashcards.pollLast();
-        flashcards.addFirst(current);
+        current = flashcards.pollFirst();
+        flashcards.offer(current);
+        current = flashcards.peekFirst();
+//        System.out.println(getListSets());
         return current;
     }
 
     //MODIFIES: this
     //EFFECTS: adds new card to FlashcardSet
     public void addCard(Flashcard card) {
-        flashcards.add(card);
+        flashcards.addFirst(card);
+//        System.out.println(getListSets());
         EventLog.getInstance().logEvent(new Event(String.format("Added %s to %s", card.getFront(), setName)));
     }
 
@@ -89,7 +100,7 @@ public class FlashcardSet implements Writable {
     public boolean removeCard(String name) {
         if (flashcards.contains(this.getCard(name))) {
             EventLog.getInstance().logEvent(
-                    new Event(String.format("Added %s to %s", this.getCard(name).getFront(), setName)));
+                    new Event(String.format("Removed %s from %s", this.getCard(name).getFront(), setName)));
             flashcards.remove(this.getCard(name));
             return true;
         }

@@ -55,12 +55,18 @@ public class Flashcard implements Writable {
 
     //setter
     public void setFront(String front) {
+        String previous = this.front;
         this.front = front;
+        EventLog.getInstance().logEvent(
+                new Event(String.format("%s has been edited to %s", previous, this.front)));
     }
 
     //setter
     public void setBack(String back) {
+        String previous = this.back;
         this.back = back;
+        EventLog.getInstance().logEvent(
+                new Event(String.format("%s has been edited to %s", previous, this.back)));
     }
 
     //MODIFIES: this

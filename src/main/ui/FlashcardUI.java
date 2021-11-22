@@ -224,7 +224,7 @@ public class FlashcardUI extends JDialog {
                 cardUI,
                 "Would you like to delete this set?");
         if (r == JOptionPane.YES_OPTION) {
-            libraryGUI.lib.removeSet(set.getSetName());
+            libraryGUI.lib.removeSet(set);
             libraryGUI.refreshButtons();
             cardUI.dispose();
         }
