@@ -180,16 +180,22 @@ public class FlashcardUI extends JDialog {
         }
     }
 
+    //MODIFIES: this, currentCard, set
+    //EFFECTS: marks the current flashcard as completed
     private void markCard() {
         currentCard.markCompleted();
         refreshCard();
     }
 
+    //MODIFIES: this, currentCard, set
+    //EFFECTS: sets currentCards as the next card in the set
     private void nextCard() {
         currentCard = set.getNextCard();
         refreshCard();
     }
 
+    //MODIFIES: this, currentCard, set
+    //EFFECTS: sets the current flashcard as the previous card in the set.
     private void previousCard() {
         currentCard = set.getPrevCard();
         refreshCard();

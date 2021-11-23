@@ -1,7 +1,5 @@
 package ui;
 
-import model.Flashcard;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -16,14 +14,13 @@ import java.util.List;
 
 public class TitlePanel extends JPanel implements Serializable {
     private final FlashcardLibraryGUI flashcardLibraryGUI;
-    private JPanel menuOptions = new JPanel();
-    private JPanel menuSidebar = new JPanel(new FlowLayout());
-
 
 
     public TitlePanel(FlashcardLibraryGUI flashcardLibraryGUI) {
         this.flashcardLibraryGUI = flashcardLibraryGUI;
+        JPanel menuOptions = new JPanel();
         addMenuButtons(menuOptions);
+        JPanel menuSidebar = new JPanel(new FlowLayout());
         addTitle(menuSidebar);
         menuSidebar.add(menuOptions);
         menuSidebar.setPreferredSize(

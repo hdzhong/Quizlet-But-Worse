@@ -21,10 +21,9 @@ import java.io.IOException;
 
 public class FlashcardLibraryGUI extends JFrame {
     protected static int WIDTH = 1280;
-    protected static int HEIGHT = 760;
+    protected static int HEIGHT = 720;
     protected final JFrame desktop;
-    private JPanel title;
-    private final FlashcardSetPanel sets;
+    private FlashcardSetPanel sets;
     protected FlashcardLibrary lib;
     protected SelectMenu selectMenu = new SelectMenu();
     protected SelectSet selectSet = new SelectSet();
@@ -42,7 +41,7 @@ public class FlashcardLibraryGUI extends JFrame {
         desktop.setTitle("Quizlet But Worse");
         initFont();
 
-        title = new TitlePanel(this);
+        new TitlePanel(this);
         sets = new FlashcardSetPanel(this);
 
         desktop.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -60,7 +59,7 @@ public class FlashcardLibraryGUI extends JFrame {
     }
 
 
-    // MODIFIES: this
+    // MODIFIES: this, library
     // EFFECTS: opens up file select to allow user to choose library to load. Then loads selected data
     private void loadLibrary() {
         JFileChooser fc = new JFileChooser("./data");
@@ -134,7 +133,7 @@ public class FlashcardLibraryGUI extends JFrame {
         }
     }
 
-    // MODIFIES: this
+    // MODIFIES: this, library
     // EFFECTS: adds set to the FlashcardLibrary and then displays new set of cards
     private void createCard(String name) {
         lib.addSet(new FlashcardSet(name));
@@ -170,6 +169,8 @@ public class FlashcardLibraryGUI extends JFrame {
     // EFFECTS: refreshes the panel that displays the flashcard sets
     protected void refreshButtons() {
         sets.refreshButtons();
+        desktop.revalidate();
+        desktop.repaint();
     }
 
     // MODIFIES: this
@@ -190,6 +191,8 @@ public class FlashcardLibraryGUI extends JFrame {
         }
     }
 
+    //MODIFIES: nothing?
+    //EFFECTS: prints out the log of the events that happened during the application to the console
     public void printLog(EventLog el) {
         for (Event next : el) {
             System.out.println(next.toString() + "\n");
