@@ -43,6 +43,12 @@ be a very useful tool to create and tailor to my own needs.
 - As a user, I want to be able to visually see all my sets and flashcards
 - As a user, I want to be able to load and save the state of the application
 
+### Phase 4: Task 3
+- I had to drop a lot of functionality when migrating from a console based UI to my graphical UI. 
+- I hope to add back in some functionality such as the matching game and a more robust search function
+- I hope to refactor the toolbar menu of my flashcard UI as a separate panel
+- I hope to make my application more robust by addition my exceptions, try/catch clauses, and assertions
+
 ### Phase 4: Task 2
 **Sample log:**
 
