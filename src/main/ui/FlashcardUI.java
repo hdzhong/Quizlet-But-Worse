@@ -74,7 +74,6 @@ public class FlashcardUI extends JDialog {
     // MODIFIES: this
     // EFFECTS: creates JButton that contains the flashcard text. Can be a new card, the front, or the back.
     private void displayCard(JButton card) {
-//        JButton card = new JButton();
         if (currentCard == null) {
             card.setText("");
         } else if (currentCard.getSide()) {
@@ -82,11 +81,20 @@ public class FlashcardUI extends JDialog {
         } else {
             card.setText("Back: " + currentCard.getBack());
         }
+
+        colorCompleted(card);
+
+        cardProperties(card);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: if card is completed, colour the card green, otherwise leave it as default colour
+    private void colorCompleted(JButton card) {
         if (currentCard.isCompleted()) {
             card.setBackground(new Color(34, 254, 148, 46));
+        } else {
+            card.setBackground(null);
         }
-        cardProperties(card);
-//        return card;
     }
 
     // MODIFIES: this

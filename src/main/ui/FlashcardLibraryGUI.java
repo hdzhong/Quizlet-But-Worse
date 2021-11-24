@@ -10,7 +10,6 @@ import persistence.JsonWriter;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -82,7 +81,7 @@ public class FlashcardLibraryGUI extends JFrame {
 
     // MODIFIES: this
     // EFFECTS: allows user to interact with buttons on FlashcardLibraryGUI
-    private class SelectSet implements ActionListener {
+    private class SelectSet extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
             JButton src = (JButton) e.getSource();
@@ -93,7 +92,7 @@ public class FlashcardLibraryGUI extends JFrame {
 
     // MODIFIES: this
     // EFFECTS: allows user to interact with buttons on FlashcardLibraryGUI
-    private class SelectMenu implements ActionListener {
+    private class SelectMenu extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
             JButton src = (JButton) e.getSource();
