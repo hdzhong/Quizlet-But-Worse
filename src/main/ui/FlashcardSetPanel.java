@@ -9,30 +9,20 @@ import java.util.List;
 
 public class FlashcardSetPanel extends JScrollPane implements Serializable {
     private final FlashcardLibraryGUI libraryGUI;
-    JPanel buttons;
-    JScrollPane scroll;
-    List<String> setList;
 
     public FlashcardSetPanel(FlashcardLibraryGUI gui) {
+        super(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         this.libraryGUI = gui;
-        createScrollPane();
+        flashcardSetDisplay();
+        setPreferredSize(new Dimension((int) (FlashcardLibraryGUI.WIDTH * 0.70), FlashcardLibraryGUI.HEIGHT));
     }
 
-    //MODIFIES: this
-    //EFFECTS: creates ScrollPane that views into the display of all sets
-    void createScrollPane() {
-        buttons = flashcardSetDisplay();
-        scroll = new JScrollPane(
-                buttons, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scroll.setPreferredSize(new Dimension((int) (FlashcardLibraryGUI.WIDTH * 0.70), FlashcardLibraryGUI.HEIGHT));
-        libraryGUI.desktop.add(scroll);
-    }
 
     // MODIFIES: this
     // EFFECTS: creates panel that displays all flashcard sets as a 3x3 grid
-    protected JPanel flashcardSetDisplay() {
-        buttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        setList = libraryGUI.lib.viewLibrary();
+    protected void flashcardSetDisplay() {
+        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        List<String> setList = libraryGUI.lib.viewLibrary();
 
         // Adds button with set names
         for (String set : setList) {
@@ -55,12 +45,12 @@ public class FlashcardSetPanel extends JScrollPane implements Serializable {
         buttons.setPreferredSize(
                 new Dimension((int) (FlashcardLibraryGUI.WIDTH * 0.56), FlashcardLibraryGUI.HEIGHT * 2));
         buttons.setVisible(true);
-        return buttons;
+        this.setViewportView(buttons);
     }
 
     // MODIFIES: this
     // EFFECTS: forces buttons representing flashcard sets to be a certain size
-    void setButtonSize(JButton button) {
+    private void setButtonSize(JButton button) {
         button.setMinimumSize(cardSize());
         button.setPreferredSize(cardSize());
         button.setMaximumSize(cardSize());
@@ -76,9 +66,8 @@ public class FlashcardSetPanel extends JScrollPane implements Serializable {
     // MODIFIES: this
     // EFFECTS: refreshes the panel that displays the flashcard sets
     protected void refreshButtons() {
-        libraryGUI.desktop.remove(scroll);
-        createScrollPane();
-        libraryGUI.desktop.revalidate();
-        libraryGUI.desktop.repaint();
+        flashcardSetDisplay();
+        repaint();
+        revalidate();
     }
 }

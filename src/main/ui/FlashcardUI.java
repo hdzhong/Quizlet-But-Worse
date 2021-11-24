@@ -1,7 +1,5 @@
 package ui;
 
-import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatArcDarkContrastIJTheme;
 import model.Flashcard;
 import model.FlashcardSet;
 
@@ -18,30 +16,29 @@ public class FlashcardUI extends JDialog {
     private final FlashcardLibraryGUI libraryGUI;
     private final FlashcardSet set;
     private Flashcard currentCard;
-    private final JDialog cardUI;
-    private JButton card;
+    private final JButton card = new JButton();
     private final JPanel controls;
     private final List<JButton> buttons;
 
 
 
     public FlashcardUI(FlashcardLibraryGUI ui, FlashcardSet set) {
+        super(ui, "Flashcard", true);
         this.libraryGUI = ui;
         this.set = set;
         this.currentCard = set.getCurrent();
-        FlatLaf.setup(new FlatArcDarkContrastIJTheme());
-        cardUI = new JDialog(libraryGUI, "Flashcard", true);
-        cardUI.setSize(FlashcardLibraryGUI.WIDTH, FlashcardLibraryGUI.HEIGHT);
-        cardUI.setResizable(false);
-        cardUI.setLayout(new FlowLayout());
+
+        setSize(FlashcardLibraryGUI.WIDTH, FlashcardLibraryGUI.HEIGHT);
+        setResizable(false);
+        setLayout(new FlowLayout());
         controls = new JPanel(new FlowLayout());
         buttons = new ArrayList<>();
 
-        displayCard();
-        cardUI.add(card);
+        displayCard(card);
+        add(card);
         addToolButtons();
-        cardUI.setVisible(true);
-
+        setVisible(true);
+        pack();
     }
 
     // MODIFIES: this
@@ -70,35 +67,36 @@ public class FlashcardUI extends JDialog {
             button.setFont(libraryGUI.font.deriveFont(Font.PLAIN,18f));
             controls.add(button);
         }
-        controls.setMinimumSize(new Dimension(cardUI.getWidth(), (int) (cardUI.getHeight() * 0.2)));
-        cardUI.add(controls);
+        controls.setMinimumSize(new Dimension(this.getWidth(), (int) (this.getHeight() * 0.2)));
+        this.add(controls);
     }
 
     // MODIFIES: this
     // EFFECTS: creates JButton that contains the flashcard text. Can be a new card, the front, or the back.
-    private JButton displayCard() {
+    private void displayCard(JButton card) {
+//        JButton card = new JButton();
         if (currentCard == null) {
-            card = new JButton("");
+            card.setText("");
         } else if (currentCard.getSide()) {
-            card = new JButton("Front: " + currentCard.getFront());
+            card.setText("Front: " + currentCard.getFront());
         } else {
-            card = new JButton("Back: " + currentCard.getBack());
+            card.setText("Back: " + currentCard.getBack());
         }
         if (currentCard.isCompleted()) {
             card.setBackground(new Color(34, 254, 148, 46));
         }
-        cardProperties();
-        return card;
+        cardProperties(card);
+//        return card;
     }
 
     // MODIFIES: this
     // EFFECTS: sets the various properties of the Card object
-    private void cardProperties() {
-        card.setFont(libraryGUI.font.deriveFont(Font.BOLD,50f));
-        card.setPreferredSize(new Dimension(
-                cardUI.getWidth() - 100, (int) (cardUI.getHeight() * 0.84)));
-        card.setAlignmentX(Component.LEFT_ALIGNMENT);
-        card.addActionListener(new FlipAction());
+    private void cardProperties(JButton panel) {
+        panel.setFont(libraryGUI.font.deriveFont(Font.BOLD,50f));
+        panel.setPreferredSize(new Dimension(
+                this.getWidth() - 100, (int) (this.getHeight() * 0.84)));
+        panel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        panel.addActionListener(new FlipAction());
     }
 
     // MODIFIES: this
@@ -106,8 +104,8 @@ public class FlashcardUI extends JDialog {
     private class NavAction extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
-            JButton src = (JButton) e.getSource();
-            toolbarOptions(src);
+            JButton card = (JButton) e.getSource();
+            toolbarOptions(card);
         }
     }
 
@@ -116,19 +114,19 @@ public class FlashcardUI extends JDialog {
     private class FlipAction extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
-            JButton src = (JButton) e.getSource();
-            flipSide(src);
+            JButton card = (JButton) e.getSource();
+            flipSide(card);
         }
     }
 
 
     // MODIFIES: this
     // EFFECTS: flips the display text of the card (front --> back, back --> front)
-    private void flipSide(JButton src) {
-        if (src.getText().equals("Front: " + currentCard.getFront())) {
+    private void flipSide(JButton card) {
+        if (card.getText().equals("Front: " + currentCard.getFront())) {
             currentCard.changeSide();
             card.setText("Back: " + currentCard.getBack());
-        } else if (src.getText().equals("Back: " + currentCard.getBack())) {
+        } else if (card.getText().equals("Back: " + currentCard.getBack())) {
             currentCard.changeSide();
             card.setText("Front: " + currentCard.getFront());
         }
@@ -137,15 +135,10 @@ public class FlashcardUI extends JDialog {
     // MODIFIES: this
     // EFFECTS: refreshes all UI components in FlashcardUI
     private void refreshCard() {
-        cardUI.remove(card);
-        card = displayCard();
-        cardUI.add(card);
-        card.revalidate();
+        displayCard(card);
         card.repaint();
-        cardUI.remove(controls);
-        cardUI.add(controls);
-        cardUI.revalidate();
-        cardUI.repaint();
+        revalidate();
+        repaint();
     }
 
     // MODIFIES: this
@@ -205,7 +198,7 @@ public class FlashcardUI extends JDialog {
     // EFFECTS: closes the flashcard and returns to libraryGUI.
     // Also refreshes libraryGUI to reflect any changes
     private void returnMenu() {
-        cardUI.dispose();
+        this.dispose();
         libraryGUI.refreshButtons();
     }
 
@@ -227,12 +220,12 @@ public class FlashcardUI extends JDialog {
     // If yes, exits the card menu and removes the set from libraryGUI and updates it
     private void removeSet() {
         int r = JOptionPane.showConfirmDialog(
-                cardUI,
+                this,
                 "Would you like to delete this set?");
         if (r == JOptionPane.YES_OPTION) {
             libraryGUI.lib.removeSet(set);
             libraryGUI.refreshButtons();
-            cardUI.dispose();
+            this.dispose();
         }
     }
 
@@ -240,9 +233,9 @@ public class FlashcardUI extends JDialog {
     // EFFECTS: allows user to edit the front and back of the current flashcard
     private void editCard() {
         String front = JOptionPane.showInputDialog(
-                cardUI, "Enter the front of the card", currentCard.getFront());
+                this, "Enter the front of the card", currentCard.getFront());
         String back = JOptionPane.showInputDialog(
-                cardUI, "Enter the back of the card", currentCard.getBack());
+                this, "Enter the back of the card", currentCard.getBack());
         if (front != null || back != null) {
             currentCard.setFront(front);
             currentCard.setBack(back);
@@ -253,8 +246,8 @@ public class FlashcardUI extends JDialog {
     // MODIFIES: this, libraryGUI, lib
     // EFFECTS: adds new flashcards to the given set
     private void addCard() {
-        String front = JOptionPane.showInputDialog(cardUI, "Enter the front of the card");
-        String back = JOptionPane.showInputDialog(cardUI, "Enter the back of the card");
+        String front = JOptionPane.showInputDialog(this, "Enter the front of the card");
+        String back = JOptionPane.showInputDialog(this, "Enter the back of the card");
         currentCard = new Flashcard(front, back);
         set.addCard(currentCard);
         refreshCard();

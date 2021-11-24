@@ -21,35 +21,37 @@ import java.io.IOException;
 
 public class FlashcardLibraryGUI extends JFrame {
     protected static int WIDTH = 1280;
-    protected static int HEIGHT = 720;
-    protected final JFrame desktop;
-    private FlashcardSetPanel sets;
+    protected static int HEIGHT = 750;
+    private final FlashcardSetPanel sets;
     protected FlashcardLibrary lib;
     protected SelectMenu selectMenu = new SelectMenu();
     protected SelectSet selectSet = new SelectSet();
+    private final TitlePanel title;
     private JsonReader jsonReader;
+    private JsonWriter jsonWriter;
     private static String JSON_STORE;
     protected Font font;
 
 
     public FlashcardLibraryGUI() {
-        FlatLaf.setup(new FlatArcDarkContrastIJTheme());
         UIManager.put("Button.arc", 10);
         lib = new FlashcardLibrary();
-        desktop = new JFrame();
-        desktop.setLayout(new FlowLayout());
-        desktop.setTitle("Quizlet But Worse");
+        setLayout(new FlowLayout());
+        setTitle("Quizlet But Worse");
         initFont();
 
-        new TitlePanel(this);
+        title = new TitlePanel(this);
+        add(title);
         sets = new FlashcardSetPanel(this);
+        add(sets);
 
-        desktop.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        desktop.setSize(WIDTH, HEIGHT);
-        desktop.setMinimumSize(new Dimension(WIDTH, HEIGHT));
-        desktop.setVisible(true);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        setSize(WIDTH, HEIGHT);
+        setMinimumSize(new Dimension(WIDTH, HEIGHT));
+        setVisible(true);
+        pack();
 
-        desktop.addWindowListener(new WindowAdapter() {
+        addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 printLog(EventLog.getInstance());
@@ -63,14 +65,16 @@ public class FlashcardLibraryGUI extends JFrame {
     // EFFECTS: opens up file select to allow user to choose library to load. Then loads selected data
     private void loadLibrary() {
         JFileChooser fc = new JFileChooser("./data");
-        int res = fc.showOpenDialog(desktop);
+        int res = fc.showOpenDialog(this);
         if (res == JFileChooser.APPROVE_OPTION) {
             String filepath = fc.getSelectedFile().getAbsolutePath();
             jsonReader = new JsonReader(filepath);
         }
         try {
-            lib = jsonReader.read();
-            System.out.println("Loaded " + lib.getName() + " from " + JSON_STORE);
+            if (jsonReader != null) {
+                lib = jsonReader.read();
+                System.out.println("Loaded " + lib.getName() + " from " + JSON_STORE);
+            }
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + JSON_STORE);
         }
@@ -102,7 +106,7 @@ public class FlashcardLibraryGUI extends JFrame {
     // If an existing set is selected, display that set.
     private void selectSet(JButton src) {
         if (src.getText().equals("Add Set")) {
-            String name = JOptionPane.showInputDialog(desktop, "Enter new set name:");
+            String name = JOptionPane.showInputDialog(this, "Enter new set name:");
             if (name != null) {
                 createCard(name);
             }
@@ -157,11 +161,11 @@ public class FlashcardLibraryGUI extends JFrame {
     // MODIFIES: this
     // EFFECTS: searches for set given set name. Returns set if found, otherwise returns error message
     private void searchSets() {
-        String name = JOptionPane.showInputDialog(desktop, "Enter the set you are looking for: ");
+        String name = JOptionPane.showInputDialog(this, "Enter the set you are looking for: ");
         if (lib.getSet(name) != null) {
             new FlashcardUI(this, lib.getSet(name));
         } else {
-            JOptionPane.showMessageDialog(desktop, "Set cannot be found");
+            JOptionPane.showMessageDialog(this, "Set cannot be found");
         }
     }
 
@@ -169,24 +173,22 @@ public class FlashcardLibraryGUI extends JFrame {
     // EFFECTS: refreshes the panel that displays the flashcard sets
     protected void refreshButtons() {
         sets.refreshButtons();
-        desktop.revalidate();
-        desktop.repaint();
     }
 
     // MODIFIES: this
     // EFFECTS: allows user to save file with given name, storing all information as JSON
     private void saveLibrary() {
-        String filename = JOptionPane.showInputDialog(desktop, "Please give your library a name");
+        String filename = JOptionPane.showInputDialog(this, "Please give your library a name");
         if (filename != null) {
             JSON_STORE = String.format("./data/%s.json", filename);
-            JsonWriter jsonWriter = new JsonWriter(JSON_STORE);
+            jsonWriter = new JsonWriter(JSON_STORE);
             try {
                 jsonWriter.open();
                 jsonWriter.write(lib);
                 jsonWriter.close();
-                JOptionPane.showMessageDialog(desktop, "Saved to " + JSON_STORE);
+                JOptionPane.showMessageDialog(this, "Saved to " + JSON_STORE);
             } catch (FileNotFoundException e) {
-                JOptionPane.showMessageDialog(desktop, "Unable to write to file: " + JSON_STORE);
+                JOptionPane.showMessageDialog(this, "Unable to write to file: " + JSON_STORE);
             }
         }
     }

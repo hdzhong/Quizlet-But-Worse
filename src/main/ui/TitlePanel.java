@@ -17,16 +17,16 @@ public class TitlePanel extends JPanel implements Serializable {
 
 
     public TitlePanel(FlashcardLibraryGUI flashcardLibraryGUI) {
+        super(new FlowLayout());
         this.flashcardLibraryGUI = flashcardLibraryGUI;
         JPanel menuOptions = new JPanel();
         addMenuButtons(menuOptions);
-        JPanel menuSidebar = new JPanel(new FlowLayout());
-        addTitle(menuSidebar);
-        menuSidebar.add(menuOptions);
-        menuSidebar.setPreferredSize(
+
+        addTitle(this);
+        add(menuOptions);
+        setPreferredSize(
                 new Dimension((int) (FlashcardLibraryGUI.WIDTH * 0.275), FlashcardLibraryGUI.HEIGHT));
-        menuSidebar.setVisible(true);
-        flashcardLibraryGUI.desktop.add(menuSidebar);
+        setVisible(true);
     }
 
 
