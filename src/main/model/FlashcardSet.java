@@ -118,7 +118,7 @@ public class FlashcardSet implements Writable {
             } else {
                 this.completed = true;
                 EventLog.getInstance().logEvent(
-                        new Event(String.format("%s is completed", setName)));
+                        new Event(String.format("%s set is completed", setName)));
 
             }
         }

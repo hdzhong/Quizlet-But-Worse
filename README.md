@@ -48,6 +48,9 @@ be a very useful tool to create and tailor to my own needs.
 - I hope to add back in some functionality such as the matching game and a more robust search function
 - I hope to refactor the toolbar menu of my flashcard UI as a separate panel
 - I hope to make my application more robust by addition my exceptions, try/catch clauses, and assertions
+- I hope to implement a bidirectional relationships between all my models to prevent duplication of certain items
+- Right now I have more than one UI element coupled to my model but I believe it is possible to reduce the coupling by 
+implementing the observer design pattern instead
 
 ### Phase 4: Task 2
 **Sample log:**

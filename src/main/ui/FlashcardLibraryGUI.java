@@ -129,8 +129,6 @@ public class FlashcardLibraryGUI extends JFrame {
                 searchSets();
                 break;
             case "Exit":
-                EventLog.getInstance().logEvent(
-                        new Event("Exited application"));
                 printLog(EventLog.getInstance());
                 System.exit(0);
         }
