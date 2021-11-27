@@ -16,7 +16,7 @@ public class FlashcardUI extends JDialog {
     private final FlashcardLibraryGUI libraryGUI;
     private final FlashcardSet set;
     private Flashcard currentCard;
-    private final JButton card = new JButton();
+    private final JButton card;
     private final JPanel controls;
     private final List<JButton> buttons;
 
@@ -27,6 +27,8 @@ public class FlashcardUI extends JDialog {
         this.libraryGUI = ui;
         this.set = set;
         this.currentCard = set.getCurrent();
+        this.card = new JButton();
+        card.addActionListener(new FlipAction());
 
         setSize(FlashcardLibraryGUI.WIDTH, FlashcardLibraryGUI.HEIGHT);
         setResizable(false);
@@ -83,7 +85,6 @@ public class FlashcardUI extends JDialog {
         }
 
         colorCompleted(card);
-
         cardProperties(card);
     }
 
@@ -104,7 +105,7 @@ public class FlashcardUI extends JDialog {
         panel.setPreferredSize(new Dimension(
                 this.getWidth() - 100, (int) (this.getHeight() * 0.84)));
         panel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        panel.addActionListener(new FlipAction());
+//        panel.addActionListener(new FlipAction());
     }
 
     // MODIFIES: this
