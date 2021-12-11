@@ -1,0 +1,105 @@
+{
+    "sets": [
+        {
+            "cards": [{
+                "back": "October 27",
+                "front": "Midterm",
+                "completed": false
+            }],
+            "completed": false,
+            "set name": "CPSC 121",
+            "category": "CPSC"
+        },
+        {
+            "cards": [{
+                "back": "Vector",
+                "front": "Matrix",
+                "completed": false
+            }],
+            "completed": false,
+            "set name": "MATH 221",
+            "category": "MATH"
+        },
+        {
+            "cards": [{
+                "back": "",
+                "front": "",
+                "completed": false
+            }],
+            "completed": false,
+            "set name": "sdfadf",
+            "category": ""
+        },
+        {
+            "cards": [{
+                "back": "",
+                "front": "",
+                "completed": false
+            }],
+            "completed": false,
+            "set name": "asdfasdfasdf",
+            "category": ""
+        },
+        {
+            "cards": [{
+                "back": "",
+                "front": "",
+                "completed": false
+            }],
+            "completed": false,
+            "set name": "sdfgsdfg",
+            "category": ""
+        },
+        {
+            "cards": [{
+                "back": "",
+                "front": "",
+                "completed": false
+            }],
+            "completed": false,
+            "set name": "sdfgaSDDQWER",
+            "category": ""
+        },
+        {
+            "cards": [{
+                "back": "",
+                "front": "",
+                "completed": false
+            }],
+            "completed": false,
+            "set name": "SDFGSDFGAWER",
+            "category": ""
+        },
+        {
+            "cards": [{
+                "back": "",
+                "front": "",
+                "completed": true
+            }],
+            "completed": true,
+            "set name": "`123123423145",
+            "category": ""
+        },
+        {
+            "cards": [{
+                "back": "",
+                "front": "",
+                "completed": false
+            }],
+            "completed": false,
+            "set name": "3435234535",
+            "category": ""
+        },
+        {
+            "cards": [{
+                "back": "",
+                "front": "",
+                "completed": true
+            }],
+            "completed": true,
+            "set name": "FS2456456T",
+            "category": ""
+        }
+    ],
+    "name": "Douglas' Library"
+}

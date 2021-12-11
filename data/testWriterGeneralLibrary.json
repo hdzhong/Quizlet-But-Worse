@@ -1,0 +1,25 @@
+{
+    "sets": [
+        {
+            "cards": [{
+                "back": "supertype",
+                "front": "interface",
+                "completed": false
+            }],
+            "completed": false,
+            "set name": "CPSC 121",
+            "category": "CPSC"
+        },
+        {
+            "cards": [{
+                "back": "algebra",
+                "front": "matrix",
+                "completed": false
+            }],
+            "completed": false,
+            "set name": "MATH 221",
+            "category": "MATH"
+        }
+    ],
+    "name": "Douglas' Library"
+}

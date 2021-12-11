@@ -1,0 +1,25 @@
+{
+    "sets": [
+        {
+            "cards": [{
+                "back": "October 27",
+                "front": "Midterm",
+                "completed": false
+            }],
+            "completed": false,
+            "set name": "CPSC 121",
+            "category": "CPSC"
+        },
+        {
+            "cards": [{
+                "back": "Vector",
+                "front": "Matrix",
+                "completed": false
+            }],
+            "completed": false,
+            "set name": "MATH 221",
+            "category": "MATH"
+        }
+    ],
+    "name": "Douglas' Library"
+}
