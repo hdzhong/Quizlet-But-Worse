@@ -1,4 +1,4 @@
-# My Personal Project
+# CPSC 210 2021 Term 1 Project
 
 ## Interactive Flashcards
 
